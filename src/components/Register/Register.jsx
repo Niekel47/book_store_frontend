@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import "./Register.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../../redux/slice/customer/authSlice";
 
 const Register = () => {
   const [fullname, setFullname] = useState("");
@@ -11,6 +12,13 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isSuccess = useSelector(
+    (state) => state.customer.auth.isSuccessRegister
+  );
+  const isError = useSelector((state) => state.customer.auth.isErrorRegister);
+
   const defaultvalidinput = {
     isValidEmail: true,
     isValidPassword: true,
@@ -18,11 +26,11 @@ const Register = () => {
     isValidAddress: true,
   };
   const [objectInput, setObjectInput] = useState(defaultvalidinput);
-  const isvalidinput = () => {
+  const isValidInput = () => {
     setObjectInput(defaultvalidinput);
 
     if (!email) {
-      toast.error("emailis required");
+      toast.error("email is required");
       return false;
     }
     let regx = /\S+@\S+\.\S+/;
@@ -49,67 +57,33 @@ const Register = () => {
 
     return true;
   };
-  useEffect(() => {
-    // axios.post("http://localhost:3001/api/auth/register").then(() => {
-    //   const data = { fullname, email, password, phone, address };
-    //   console.log("checkdata", data);
-    // });
-    // try {
-    //   const response = axios.post("http://localhost:3001/api/auth/register", {
-    //     fullname,
-    //     email,
-    //     password,
-    //     phone,
-    //     address,
-    //   });
-    //   if (response.status === 200) {
-    //     alert("User has been created");
-    //     // Redirect to login page after successful registration
-    //   } else {
-    //     alert("No record existed");
-    //   }
-    // } catch (error) {
-    //   console.error("An error occurred:", error);
-    //   alert("An error occurred while registering user.");
-    // }
-  }, []);
-  // const history = useHistory();
 
-  // const handleLogin = () => {
-  //   history.push("/login");
-  // };
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Registration successful!");
+      navigate("/login");
+    }
+  }, [isSuccess, navigate]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    handleRegister();
   };
+
   const handleRegister = async () => {
-    let check = isvalidinput();
+    let check = isValidInput();
+    let data_user = {
+      fullname: fullname,
+      email: email,
+      phone: phone,
+      address: address,
+      password: password,
+    };
     if (check) {
-      try {
-        const response = await axios.post(
-          "http://localhost:3001/api/auth/register",
-          {
-            fullname,
-            email,
-            password,
-            phone,
-            address,
-          }
-        );
-        console.log("response", response.data);
-        if (response.status === 200) {
-          toast.success("User has been created");
-          // Redirect to login page after successful registration
-          // history.push("/login");
-        } else {
-          toast.error("No record existed");
-        }
-      } catch (error) {
-        console.error("An error occurred:", error);
-        toast.error("An error occurred while registering user.");
-      }
+      dispatch(register(data_user));
     }
   };
+
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center dark:bg-transparent">
       <div className="container">
@@ -182,11 +156,7 @@ const Register = () => {
                       onChange={(e) => setAddress(e.target.value)}
                     />
                   </div>
-                  <button
-                    className="btn btn-success text-black"
-                    type="submit"
-                    onClick={handleRegister}
-                  >
+                  <button className="btn btn-success text-black" type="submit">
                     Create Account
                   </button>
                 </form>

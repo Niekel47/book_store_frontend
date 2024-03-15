@@ -1,7 +1,6 @@
 import React from "react";
 import Logo from "../../assets/website/logo.png";
 import { FaCartShopping } from "react-icons/fa6";
-import DarkMode from "./DarkMode";
 import { FaCaretDown } from "react-icons/fa";
 
 const Menu = [
@@ -13,7 +12,7 @@ const Menu = [
   {
     id: 2,
     name: "Best Seller",
-    link: "/#services",
+    link: "/#",
   },
 ];
 
@@ -32,7 +31,7 @@ const DropdownLinks = [
   },
 ];
 
-const Navbar = ({}) => {
+const Navbar = ({ handleOrderPopup }) => {
   return (
     <>
       <div className="shadow-md bg-white dark:bg-gray-900 dark:text-white duration-200">
@@ -45,11 +44,8 @@ const Navbar = ({}) => {
               </a>
             </div>
             <div className="flex justify-between items-center gap-4">
-              <div>
-                <DarkMode />
-              </div>
               <ul className="hidden sm:flex items-center gap-4">
-                {/* {Menu.map((menu) => (
+                {Menu.map((menu) => (
                   <li key={menu.id}>
                     <a
                       href={menu.link}
@@ -58,7 +54,7 @@ const Navbar = ({}) => {
                       {menu.name}
                     </a>
                   </li>
-                ))} */}
+                ))}
                 {/* Simple Dropdown and Links */}
                 <li className="group relative cursor-pointer">
                   <a
@@ -72,7 +68,7 @@ const Navbar = ({}) => {
                   </a>
                   <div className="absolute -left-9 z-[9999] hidden w-[150px] rounded-md bg-white p-2 text-black group-hover:block  ">
                     <ul className="space-y-3">
-                      {/* {DropdownLinks.map((data) => (
+                      {DropdownLinks.map((data) => (
                         <li key={data.name}>
                           <a
                             className="inline-block w-full rounded-md p-2 hover:bg-primary/20"
@@ -81,13 +77,13 @@ const Navbar = ({}) => {
                             {data.name}
                           </a>
                         </li>
-                      ))} */}
+                      ))}
                     </ul>
                   </div>
                 </li>
               </ul>
               <button
-                // onClick={() => handleOrderPopup()}
+                onClick={() => handleOrderPopup()}
                 className="bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-1 px-4 rounded-full flex items-center gap-3"
               >
                 Order
