@@ -98,3 +98,4 @@ const Navbar = ({ handleOrderPopup }) => {
 };
 
 export default Navbar;
+

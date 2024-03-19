@@ -6,13 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProductHome } from "../../redux/slice/customer/productSlice";
 import { Link } from "react-router-dom";
 
-
 const URL_Image = UrlImage();
 const URL_API = UrlApi();
 
 const ProductList = () => {
-  const listProducts = useSelector((state) => state.customer.product.listProduct);
-  const dispatch = useDispatch(); 
+  const listProducts = useSelector(
+    (state) => state.customer.product.listProduct
+  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchProductHome());

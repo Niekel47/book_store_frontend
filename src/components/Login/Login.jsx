@@ -1,13 +1,20 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios  from "axios";
-import NavBar from "../NavBar/NavBar"
+import { login } from "../../redux/slice/customer/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import Footer from "../Footer/Footer"
+import Navbar from "../NavBar/NavBar";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.customer.auth.isLoadingLogin);
+  const isAuth = useSelector((state) => state.customer.auth.isAuthSucess);
   const defaultvalidinput = {
     isValidEmail: true,
     isValidPassword: true,
@@ -34,10 +41,6 @@ const Login = () => {
   };
   const handaleLogin = async () => {
     let check = isvalidinput();
-    let data_user = {
-      email:email,
-      password:password
-    }
     if (check) {
       try {
         const response = await axios.post(
@@ -50,6 +53,7 @@ const Login = () => {
         console.log("response", response.data);
         if (response.status === 200) {
           toast.success("Đăng nhập thành công");
+          navigate("/")
         } else {
           toast.error("No record existed");
         }
@@ -65,7 +69,6 @@ const Login = () => {
   };
 
   return (
-    
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center dark:bg-transparent">
       <div className="container">
         <div className="row justify-content-center">
@@ -77,7 +80,7 @@ const Login = () => {
                   <p className="text-medium-emphasis my-2 ">
                     Sign In to your account
                   </p>
-                  <form onSubmit={handleSubmit}>
+                  <form method="POST" onSubmit={handleSubmit}>
                     <div className="input-group mb-3">
                       <input
                         className={
@@ -144,6 +147,7 @@ const Login = () => {
         </div>
       </div>
     </div>
+    
   );
 };
 

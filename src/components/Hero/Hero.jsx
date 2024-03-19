@@ -64,7 +64,7 @@ const Hero = ({ handleOrderPopup }) => {
                 className="text-5xl sm:text-6xl lg:text-7xl font-bold"
               >
                 {title}
-                <p class="bg-clip-text text-transparent bg-gradient-to-b from-primary text-right text-sm to-secondary">
+                <p className="bg-clip-text text-transparent bg-gradient-to-b from-primary text-right text-sm to-secondary">
                   by Anonymous
                 </p>{" "}
               </h1>
