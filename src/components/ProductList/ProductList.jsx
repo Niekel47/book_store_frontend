@@ -44,7 +44,12 @@ const ProductList = () => {
                       className="h-[220px] w-[150px] object-cover rounded-md "
                     />
                   </Link>
-                  <p className="items-center">{item.name}</p>
+                  <p className="flex justify-center items-center gap-1">
+                    {item.name}
+                  </p>
+                  <p className="flex justify-center items-center gap-1">
+                    {item.price.toLocaleString("vi-VN")}đ
+                  </p>
                   <div>
                     <div className="flex justify-center items-center gap-1">
                       <FaStar className="text-yellow-500" />

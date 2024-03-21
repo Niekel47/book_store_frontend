@@ -2,10 +2,10 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
-import axios  from "axios";
+import axios from "axios";
 import { login } from "../../redux/slice/customer/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import Footer from "../Footer/Footer"
+import Footer from "../Footer/Footer";
 import Navbar from "../NavBar/NavBar";
 
 const Login = () => {
@@ -53,7 +53,7 @@ const Login = () => {
         console.log("response", response.data);
         if (response.status === 200) {
           toast.success("Đăng nhập thành công");
-          navigate("/")
+          navigate("/");
         } else {
           toast.error("No record existed");
         }
@@ -147,7 +147,6 @@ const Login = () => {
         </div>
       </div>
     </div>
-    
   );
 };
 

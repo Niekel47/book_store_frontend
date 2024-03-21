@@ -16,7 +16,7 @@ export const fetchAllCategory = createAsyncThunk(
   "category/fetchAllCategory",
   async () => {
     try {
-      const res = await axios.get(URL_API + `/categories`);
+      const res = await axios.get(URL_API + `/category`);
       return res.data;
     } catch (error) {
       console.log(error);
