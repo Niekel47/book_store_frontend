@@ -1,38 +1,38 @@
-import axios from "axios";
-import { UrlApi } from "../../url";
+// import axios from "axios";
+// import { UrlApi } from "../../url";
 
-const URL_API = UrlApi();
+// const URL_API = UrlApi();
 
-const getProductCategory = async (category_id, page) => {
-  return await axios.get(URL_API + `/categories/${category_id}?page=${page}`);
-};
+// const getProductCategory = async (category_id, page) => {
+//   return await axios.get(URL_API + `/categories/${category_id}?page=${page}`);
+// };
 
-const getProductSearch = async (name, page) => {
-  return await axios.get(URL_API + `/search?name=${name}&page=${page}`);
-};
+// const getProductSearch = async (name, page) => {
+//   return await axios.get(URL_API + `/search?name=${name}&page=${page}`);
+// };
 
-const getOrderAdmin = async (page) => {
-  return await axios.get(URL_API + `/admin/dashboard?page=${page}`, {
-    withCredentials: true,
-  });
-};
+// const getOrderAdmin = async (page) => {
+//   return await axios.get(URL_API + `/admin/dashboard?page=${page}`, {
+//     withCredentials: true,
+//   });
+// };
 
-const getOrder = async (page) => {
-  return await axios.get(URL_API + `/admin/orders?page=${page}`, {
-    withCredentials: true,
-  });
-};
+// const getOrder = async (page) => {
+//   return await axios.get(URL_API + `/admin/orders?page=${page}`, {
+//     withCredentials: true,
+//   });
+// };
 
-const getProductAdmin = async () => {
-  return await axios.get(URL_API + `/product`, {
-    withCredentials: true,
-  });
-};
+// const getProductAdmin = async () => {
+//   return await axios.get(URL_API + `/product`, {
+//     withCredentials: true,
+//   });
+// };
 
-export {
-  getProductCategory,
-  getProductSearch,
-  getOrderAdmin,
-  getOrder,
-  getProductAdmin,
-};
+// export {
+//   getProductCategory,
+//   getProductSearch,
+//   getOrderAdmin,
+//   getOrder,
+//   getProductAdmin,
+// };

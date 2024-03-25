@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { UrlApi } from "../../../../url.js";
 
+// axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 const URL_API = UrlApi();
 
 const initialState = {
@@ -15,6 +16,9 @@ const initialState = {
   isAuthSucess: null,
   isAuthError: null,
   isSuccessLogout: null,
+  isLoadingProfile: null,
+  isSuccessProfile: null,
+  isErrorProfile: null,
 };
 
 export const register = createAsyncThunk(
@@ -32,11 +36,11 @@ export const register = createAsyncThunk(
 );
 
 export const login = createAsyncThunk(
-  "auth/login",
+  "auth/loginUser",
   async (data_user, { rejectWithValue }) => {
     try {
       const res = await axios.post(URL_API + `auth/login`, data_user, {
-        withCredentials: true,  
+        withCredentials: true,
       });
       return res.data;
     } catch (error) {
@@ -46,34 +50,25 @@ export const login = createAsyncThunk(
   }
 );
 
-export const authLogin = createAsyncThunk("auth/authLogin", async () => {
-  try {
-    const res = await axios.get(URL_API + `/authentication`, {
-      withCredentials: true,
-    });
-    return await res.data;
-  } catch (error) {
-    console.log(error);
-    return error.response.data;
-  }
-});
-
-export const authLoginToken = createAsyncThunk(
-  "auth/authLoginToken",
-  async () => {
+export const profile = createAsyncThunk(
+  "auth/profile",
+  async (_, { rejectWithValue }) => {
     try {
       let token = localStorage.getItem("jwt");
       console.log("jwt", localStorage.getItem("jwt"));
       if (!token) {
         token = "";
       }
-      const res = await axios.get(URL_API + `/authentication/${token}`, {
+      const res = await axios.get(URL_API + `auth/profile`, {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
-      return await res.data;
+      return res.data;
     } catch (error) {
       console.log(error);
-      return error.response.data;
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -93,8 +88,7 @@ export const logout = createAsyncThunk("auth/logout", async () => {
 export const authSlice = createSlice({
   name: "customer/auth",
   initialState,
-  reducers: {
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(register.pending, (state, action) => {
@@ -128,36 +122,23 @@ export const authSlice = createSlice({
         state.isLoadingLogin = false;
         state.isSuccessLogin = null;
       })
+      //profile
+      .addCase(profile.pending, (state, action) => {
+        state.isLoadingProfile = true;
+        state.isErrorProfile = null;
+        state.isSuccessProfile = null;
+      })
+      .addCase(profile.fulfilled, (state, action) => {
+        state.isSuccessProfile = action.payload;
+        state.isLoadingProfile = false;
+        state.isErrorProfile = null;
+      })
 
-    //   // Auth Token
-    //   .addCase(authLoginToken.fulfilled, (state, action) => {
-    //     if (action.payload.detail) {
-    //       state.isAuthError = action.payload;
-    //       state.isAuthSucess = null;
-    //     } else {
-    //       state.isAuthSucess = action.payload;
-    //       state.dataUser = action.payload.user;
-    //       state.isAuthError = null;
-    //     }
-    //   })
-
-    //   .addCase(authLogin.fulfilled, (state, action) => {
-    //     if (action.payload.detail) {
-    //       state.isAuthError = action.payload;
-    //       state.isAuthSucess = null;
-    //     } else {
-    //       state.isAuthSucess = action.payload;
-    //       state.dataUser = action.payload.user;
-    //       state.isAuthError = null;
-    //     }
-    //   })
-
-    //   .addCase(logout.fulfilled, (state, action) => {
-    //     state.isSuccessLogout = action.payload;
-    //     state.isAuthSucess = null;
-    //     state.isSuccessLogin = null;
-    //     state.dataUser = null;
-    //   });
+      .addCase(profile.rejected, (state, action) => {
+        state.isErrorProfile = action.payload;
+        state.isLoadingProfile = false;
+        state.isSuccessProfile = null;
+      })
   },
 });
 

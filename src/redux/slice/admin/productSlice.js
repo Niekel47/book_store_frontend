@@ -6,31 +6,26 @@ const URL_API = UrlApi();
 
 const initialState = {
   isLoadingProduct: false,
+  isLoadingCategory: false,
   isErrorProduct: false,
+  isErrorCategory: false,
   listCategory: [],
   listPublisher: [],
   listAuthor: [],
-  storeProduct: null,
+  listProduct: [],
+
+  createCategory: null,
+  createProduct: null,
   deleteProduct: null,
   updateProduct: null,
 };
 
-export const getCategory = createAsyncThunk("product/getCategory", async () => {
-  try {
-    const res = await axios.get(URL_API + `/category`);
-    const data = await res.data;
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-export const getPublisher = createAsyncThunk(
-  "product/getPublisher",
+export const getAllCategory = createAsyncThunk(
+  "product/getAllCategory",
   async () => {
     try {
-      const res = await axios.get(URL_API + `/publisher`);
-      const data = await res.data;
+      const res = await axios.get(URL_API + `/category`);
+      const data = await res.data.getallcat;
       return data;
     } catch (error) {
       console.log(error);
@@ -38,11 +33,56 @@ export const getPublisher = createAsyncThunk(
   }
 );
 
-export const getAuthor = createAsyncThunk("product/getAuthor", async () => {
+export const CreateCategory = createAsyncThunk(
+  "product/CreateCategory",
+  async (data_cat, { rejectWithValue }) => {
+    try {
+      const res = await axios.post(URL_API + `category`, data_cat, {
+        headers: { "content-type": "multipart/form-data" },
+        withCredentials: true,
+      });
+      const data = await res.data.post;
+      return data;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+
+export const getAllPublisher = createAsyncThunk(
+  "product/getAllPublisher",
+  async () => {
+    try {
+      const res = await axios.get(URL_API + `/publisher`);
+      const data = await res.data.getPublisher;
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const getAllAuthor = createAsyncThunk(
+  "product/getAllAuthor",
+  async () => {
+    try {
+      const res = await axios.get(URL_API + `/author`);
+      const data = await res.data.getallAuthor;
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const getAllProduct = createAsyncThunk("product/getAllProduct", async () => {
   try {
-    const res = await axios.get(URL_API + `/author`);
-    const data = await res.data;
-    return data;
+    const res = await axios.get(URL_API + `product`);
+    const data = await res.data.products;
+    const totalPages = await res.data.totalPages;
+    return { data, totalPages };
   } catch (error) {
     console.log(error);
   }
@@ -50,12 +90,13 @@ export const getAuthor = createAsyncThunk("product/getAuthor", async () => {
 
 export const handleCreateProduct = createAsyncThunk(
   "product/handleCreateProduct",
-  async (data_add, { rejectWithValue }) => {
+  async ( { rejectWithValue }) => {
     try {
-      const res = await axios.post(URL_API + `/product`, data_add, {
+      const res = await axios.post(URL_API + `product`,  {
         headers: { "content-type": "multipart/form-data" },
+        withCredentials: true,
       });
-      const data = await res.data;
+      const data = await res.data.newProduct;
       return data;
     } catch (error) {
       console.log(error);
@@ -69,7 +110,7 @@ export const handleUpdateProduct = createAsyncThunk(
   async (data_update, { rejectWithValue }) => {
     try {
       const res = await axios.put(
-        URL_API + `/admin/products/update`,
+        URL_API + `product/update`,
         data_update,
         {
           headers: { "content-type": "multipart/form-data" },
@@ -107,66 +148,100 @@ export const productSlice = createSlice({
   extraReducers: (builder) => {
     builder
       //Get Category
-      .addCase(getCategory.pending, (state, action) => {
-        state.isLoadingProduct = true;
-        state.listCategory = null;
-        state.isErrorProduct = null;
+      .addCase(getAllCategory.pending, (state, action) => {
+        state.listCategory = [];
+        state.isLoading = true;
+        state.isError = false;
       })
-      .addCase(getCategory.fulfilled, (state, action) => {
-        state.isLoadingProduct = true;
-        state.listCategory = action.payload.category;
-        state.isErrorProduct = null;
+      .addCase(getAllCategory.fulfilled, (state, action) => {
+        state.listCategory = action.payload;
+        state.isLoading = false;
+        state.isError = false;
       })
-      .addCase(getCategory.rejected, (state, action) => {
-        state.isLoadingProduct = false;
-        state.listCategory = null;
-        state.isErrorProduct = true;
+      .addCase(getAllCategory.rejected, (state, action) => {
+        state.listCategory = [];
+        state.isLoading = false;
+        state.isError = true;
       })
-      .addCase(getPublisher.pending, (state, action) => {
-        state.isLoadingProduct = true;
-        state.listPublisher = null;
-        state.isErrorProduct = null;
+
+      .addCase(getAllPublisher.pending, (state, action) => {
+        state.listPublisher = [];
+        state.isLoading = true;
+        state.isError = false;
       })
-      .addCase(getPublisher.fulfilled, (state, action) => {
-        state.isLoadingProduct = true;
-        state.listPublisher = action.payload.publisher;
-        state.isErrorProduct = null;
+      .addCase(getAllPublisher.fulfilled, (state, action) => {
+        state.listPublisher = action.payload;
+        state.isLoading = false;
+        state.isError = false;
       })
-      .addCase(getPublisher.rejected, (state, action) => {
-        state.isLoadingProduct = false;
-        state.listPublisher = null;
-        state.isErrorProduct = true;
+      .addCase(getAllPublisher.rejected, (state, action) => {
+        state.listPublisher = [];
+        state.isLoading = false;
+        state.isError = true;
       })
-      .addCase(getAuthor.pending, (state, action) => {
-        state.isLoadingProduct = true;
-        state.listAuthor = null;
-        state.isErrorProduct = null;
+      .addCase(getAllAuthor.pending, (state, action) => {
+        state.listAuthor = [];
+        state.isLoading = true;
+        state.isError = false;
       })
-      .addCase(getAuthor.fulfilled, (state, action) => {
-        state.isLoadingProduct = true;
-        state.listAuthor = action.payload.author;
-        state.isErrorProduct = null;
+      .addCase(getAllAuthor.fulfilled, (state, action) => {
+        state.listAuthor = action.payload;
+        state.isLoading = false;
+        state.isError = false;
       })
-      .addCase(getAuthor.rejected, (state, action) => {
-        state.isLoadingProduct = false;
-        state.listAuthor = null;
-        state.isErrorProduct = true;
+      .addCase(getAllAuthor.rejected, (state, action) => {
+        state.listAuthor = [];
+        state.isLoading = false;
+        state.isError = true;
+      })
+      //Get list Product
+      .addCase(getAllProduct.pending, (state, action) => {
+        state.listProduct = [];
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(getAllProduct.fulfilled, (state, action) => {
+        state.listProduct = action.payload.data;
+        state.totalPages = action.payload.totalPages; 
+        state.isLoading = false;
+        state.isError = false;
+      })
+      .addCase(getAllProduct.rejected, (state, action) => {
+        state.listProduct = [];
+        state.isLoading = false;
+        state.isError = true;
       })
       //   Store Product
       .addCase(handleCreateProduct.pending, (state, action) => {
         state.isLoadingProduct = true;
-        state.storeProduct = null;
+        state.createProduct = null;
         state.isErrorProduct = false;
       })
       .addCase(handleCreateProduct.fulfilled, (state, action) => {
         state.isLoadingProduct = false;
-        state.storeProduct = action.payload;
+        state.createProduct = action.payload;
         state.isErrorProduct = false;
       })
       .addCase(handleCreateProduct.rejected, (state, action) => {
         state.isLoadingProduct = false;
-        state.storeProduct = null;
+        state.createProduct = null;
         state.isErrorProduct = true;
+      })
+      //Create Category
+      .addCase(CreateCategory.pending, (state, action) => {
+        state.isLoadingCategory = true;
+        state.createCategory = null;
+        state.isErrorCategory = false;
+      })
+      .addCase(CreateCategory.fulfilled, (state, action) => {
+        state.isLoadingCategory = false;
+        state.createCategory = action.payload;
+        state.isErrorCategory = false;
+      })
+      .addCase(CreateCategory.rejected, (state, action) => {
+        state.isLoadingCategory = false;
+        state.createCategory = null;
+        state.isErrorCategory = true;
       })
       // Update Product
       .addCase(handleUpdateProduct.pending, (state, action) => {

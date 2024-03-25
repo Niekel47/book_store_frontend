@@ -22,7 +22,8 @@ const PublisherManage = () => {
       .get("http://localhost:3001/api/publisher")
       .then((response) => {
         console.log("data", response.data);
-        setPublishers(response.data.getallcat);
+        setPublishers(response.data.getPublisher);
+        setTotalPage(response.data.totalPages);
       })
       .catch((error) => {
         console.error("There was an error!", error);

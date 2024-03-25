@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Logo from "../../assets/website/logo.png";
 import { FaCartShopping } from "react-icons/fa6";
 import { FaCaretDown } from "react-icons/fa";
+import { profile } from "../../redux/slice/customer/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import NavDropdown from "react-bootstrap/NavDropdown";
+import { useNavigate } from "react-router-dom";
 
 const Menu = [
   {
@@ -32,6 +36,24 @@ const DropdownLinks = [
 ];
 
 const Navbar = ({ handleOrderPopup }) => {
+  const navigate = useNavigate(); // Move inside the component function
+  const dispatch = useDispatch();
+  const navigatePage = (page) => {
+    navigate(page);
+  };
+  const isSuccessLogin = useSelector(
+    (state) => state.customer.auth.isSuccessLogin
+  );
+  const userProfile = useSelector(
+    (state) => state.customer.auth.isSuccessProfile
+  );
+
+  useEffect(() => {
+    if (isSuccessLogin) {
+      dispatch(profile()); // Dispatch profile thunk to fetch user profile data
+    }
+  }, []);
+
   return (
     <>
       <div className="shadow-md bg-white dark:bg-gray-900 dark:text-white duration-200">
@@ -91,6 +113,25 @@ const Navbar = ({ handleOrderPopup }) => {
               </button>
             </div>
           </div>
+
+          <>
+            <NavDropdown title="Tài Khoản" id="collapsible-nav-dropdown">
+              {userProfile && userProfile.fullname && (
+                <NavDropdown.Item>
+                  Hello ! {userProfile.fullname}
+                </NavDropdown.Item>
+              )}
+              <NavDropdown.Item onClick={() => logoutClick()}>
+                Đăng Xuất
+              </NavDropdown.Item>
+              <NavDropdown.Item onClick={() => navigatePage("/login")}>
+                Đăng Nhập
+              </NavDropdown.Item>
+              <NavDropdown.Item onClick={() => navigatePage("/register")}>
+                Đăng Ký
+              </NavDropdown.Item>
+            </NavDropdown>
+          </>
         </div>
       </div>
     </>
@@ -98,4 +139,3 @@ const Navbar = ({ handleOrderPopup }) => {
 };
 
 export default Navbar;
-

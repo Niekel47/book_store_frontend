@@ -11,17 +11,17 @@ import { toast } from "react-toastify";
 const Sidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const logoutClick = () => {
-    dispatch(logoutAdmin()).then((res) => {
-      if (res.payload && res.payload.success === true) {
-        toast.success(`${res.payload.message}`);
-      }
-    });
-    dispatch(logout());
-    localStorage.removeItem("jwt_admin");
-    toast.success("Đăng xuất thành công");
-    navigate("/admin");
-  };
+  // const logoutClick = () => {
+  //   dispatch(logoutAdmin()).then((res) => {
+  //     if (res.payload && res.payload.success === true) {
+  //       toast.success(`${res.payload.message}`);
+  //     }
+  //   });
+  //   dispatch(logout());
+  //   localStorage.removeItem("jwt_admin");
+  //   toast.success("Đăng xuất thành công");
+  //   navigate("/admin");
+  // };
   return (
     <div className="bg-white sidebar p-2">
       <div className="m-2">
@@ -31,7 +31,7 @@ const Sidebar = () => {
       <hr className="text-dark" />
       <div>
         <div
-          onClick={() => navigate("/admin/dashboard")}
+          onClick={() => navigate("/admin")}
           style={{ cursor: "pointer" }}
           className="list-group-item py-2"
         >
@@ -40,7 +40,6 @@ const Sidebar = () => {
           />
           <span>Dashboard</span>
         </div>
-        <br />
         <div
           onClick={() => navigate("/admin/orders")}
           style={{ cursor: "pointer" }}
@@ -51,7 +50,7 @@ const Sidebar = () => {
           />
           <span>Đơn Hàng</span>
         </div>
-        <br />
+
         <div
           onClick={() => navigate("/admin/product")}
           style={{ cursor: "pointer" }}
@@ -62,7 +61,7 @@ const Sidebar = () => {
           />
           <span>Sản Phẩm</span>
         </div>
-        <br />
+
         <div
           style={{ cursor: "pointer" }}
           className="list-group-item py-2 "
@@ -73,7 +72,7 @@ const Sidebar = () => {
           />
           <span>Quản lý danh mục</span>
         </div>
-        <br />
+
         <div
           style={{ cursor: "pointer" }}
           className="list-group-item py-2 "
@@ -84,7 +83,18 @@ const Sidebar = () => {
           />
           <span>Quản lý nhà xuất bản</span>
         </div>
-        <br />
+
+        <div
+          style={{ cursor: "pointer" }}
+          className="list-group-item py-2 "
+          onClick={() => navigate("/admin/author")}
+        >
+          <FaBagShopping
+            style={{ fontSize: "30px", color: "blue", marginRight: "5px" }}
+          />
+          <span>Quản lý tác giả</span>
+        </div>
+
         <div
           style={{ cursor: "pointer" }}
           className="list-group-item py-2 "
@@ -95,7 +105,6 @@ const Sidebar = () => {
           />
           <span>Quản lý người dùng</span>
         </div>
-        <br />
 
         <div
           onClick={() => logoutClick()}

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { login } from "../../redux/slice/customer/authSlice";
+import { login, profile } from "../../redux/slice/customer/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Footer from "../Footer/Footer";
 import Navbar from "../NavBar/NavBar";
@@ -13,8 +13,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isLoading = useSelector((state) => state.customer.auth.isLoadingLogin);
-  const isAuth = useSelector((state) => state.customer.auth.isAuthSucess);
+
   const defaultvalidinput = {
     isValidEmail: true,
     isValidPassword: true,
@@ -43,20 +42,15 @@ const Login = () => {
     let check = isvalidinput();
     if (check) {
       try {
-        const response = await axios.post(
-          "http://localhost:3001/api/auth/login",
-          {
-            email,
-            password,
-          }
-        );
-        console.log("response", response.data);
-        if (response.status === 200) {
-          toast.success("Đăng nhập thành công");
+        let data_user = {
+          email: email,
+          password: password,
+        };
+        dispatch(login(data_user)).then((result) => {
+          localStorage.setItem("jwt", result.payload.access_token);
+          toast.success("Dang nhap thanh cong");
           navigate("/");
-        } else {
-          toast.error("No record existed");
-        }
+        });
       } catch (error) {
         console.error("An error occurred:", error);
         toast.error("An error occurred while registering user.");

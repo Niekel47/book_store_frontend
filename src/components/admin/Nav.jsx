@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 const Nav = () => {
   return (
@@ -21,16 +21,13 @@ const Nav = () => {
       </button>
       <div className="collapse navbar-collapse" id="collapsibleNavId">
         <ul className="navbar-nav ms-auto mt-2 mt-lg-0">
-          {/* {dataAdmin && dataAdmin.name && (
-            <li className="nav-item">
-              <i style={{ color: "#e28585", fontWeight: "bold" }}>Xin chào !</i>{" "}
-              {dataAdmin.name}
-            </li>
-          )} */}
+          <li className="nav-item">
+            <i style={{ color: "#e28585", fontWeight: "bold" }}>Xin chào !</i>{" "}
+          </li>
         </ul>
       </div>
     </nav>
   );
-}
+};
 
-export default Nav
+export default Nav;

@@ -6,41 +6,57 @@ import ReactPaginate from "react-paginate";
 import { MdDelete } from "react-icons/md";
 import { UrlImage } from "../../../url";
 import { FaEdit } from "react-icons/fa";
-import ModalAddProduct from "../../components/admin/ModelAddProuct";
+import ModalAddProduct from "../../components/admin/ModalAddProduct";
+import ModalEditProduct from "../../components/admin/ModalEditProduct";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import {
+  handleDeleteProduct,
+  getAllProduct,
+} from "../../redux/slice/admin/productSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const ProductManage = () => {
   const navigate = useNavigate();
   const URL_IMAGE = UrlImage();
   const [toggle, setToggle] = useState(true);
-  const [page, setPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
-  const [listProduct, setListProduct] = useState([]);
+  // const [listProduct, setListProduct] = useState([]);
   const [showModalAdd, setShowModalAdd] = useState(false);
+  const [showModalEdit, setShowModalEdit] = useState(false);
+  const [productEdit, setProductEdit] = useState({});
+  const dispatch = useDispatch();
+  const deleteProduct = useSelector(
+    (state) => state.admin.product.deleteProduct
+  );
+  const createProduct = useSelector(
+    (state) => state.admin.product.createProduct
+  );
+  const listProducts = useSelector((state) => state.admin.product.listProduct);
+  const totalPages = useSelector((state) => state.admin.product.totalPages); // Sử dụng selector để lấy totalPages từ store
+  //    const createproduct = useSelector(
+  //      (state) => state.admin.product.storeProduct
+  //    );
 
   const Toggle = () => {
     setToggle(!toggle);
   };
   useEffect(() => {
-    fetchAllProduct();
-  }, [page]);
+    // fetchAllProduct();
+    dispatch(getAllProduct(currentPage));
+  }, [currentPage, deleteProduct, createProduct]);
 
-  const fetchAllProduct = async () => {
-    try {
-      const res = await axios.get("http://localhost:3001/api/product", {
-        params: { page: page },
-      });
-      setListProduct(res.data.products);
-      setTotalPage(res.data.total_page);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const handlePageClick = (e) => {
-    setPage(e.selected + 1);
+    setCurrentPage(e.selected + 1);
   };
-
+  const handleCloseEdit = () => {
+    setShowModalEdit(false);
+  };
+  const showEdit = (product) => {
+    setShowModalEdit(true);
+    setProductEdit(product);
+  };
   const handleClose = () => {
     setShowModalAdd(false);
   };
@@ -48,17 +64,9 @@ const ProductManage = () => {
     setShowModalAdd(true);
   };
   const deleteClick = async (product_id) => {
-    try {
-      const res = await axios.delete(
-        `http://localhost:3001/api/product/${product_id}`
-      );
-      if (res === true) {
-        toast.success("Xóa thành công!");
-        fetchAllProduct(); // Refresh the product list after deletion
-      }
-    } catch (error) {
-      toast.error(error)
-    }
+    dispatch(handleDeleteProduct(product_id)).then((res) => {
+      toast.success("Xoa thanh cong");
+    });
   };
 
   return (
@@ -77,6 +85,11 @@ const ProductManage = () => {
           <ModalAddProduct
             showModalAdd={showModalAdd}
             handleClose={handleClose}
+          />
+          <ModalEditProduct
+            showModalEdit={showModalEdit}
+            handleCloseEdit={handleCloseEdit}
+            productEdit={productEdit}
           />
           <div className="col">
             <div className="px-3">
@@ -105,8 +118,8 @@ const ProductManage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {Array.isArray(listProduct) &&
-                    listProduct.map((item, index) => (
+                  {Array.isArray(listProducts) &&
+                    listProducts.map((item, index) => (
                       <tr key={item.id}>
                         <td>{index + 1}</td>
                         <td>
@@ -148,7 +161,7 @@ const ProductManage = () => {
                 onPageChange={(e) => handlePageClick(e)}
                 pageRangeDisplayed={3}
                 marginPagesDisplayed={2}
-                pageCount={totalPage}
+                pageCount={totalPages}
                 previousLabel="< "
                 pageClassName="page-item"
                 pageLinkClassName="page-link"

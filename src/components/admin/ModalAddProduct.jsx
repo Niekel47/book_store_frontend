@@ -3,6 +3,14 @@ import axios from "axios";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { toast } from "react-toastify";
+import {
+  getAllCategory,
+  getAllAuthor,
+  getAllPublisher,
+  handleCreateProduct,
+} from "../../redux/slice/admin/productSlice";
+import { useDispatch, useSelector } from "react-redux";
+import FormData from "form-data";
 
 const ModalAddProduct = (props) => {
   const { showModalAdd, handleClose } = props;
@@ -13,35 +21,23 @@ const ModalAddProduct = (props) => {
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [publisherId, setPublisherId] = useState("");
-  const [categories, setCategories] = useState([]);
-  const [publishers, setPublishers] = useState([]);
   const [authorId, setAuthorId] = useState("");
-  const [authors, setAuthors] = useState([]);
+  const { listCategory, listPublisher, listAuthor } = useSelector(
+    (state) => state.admin.product
+  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (showModalAdd === false) {
       clearInput();
     }
-    fetchCategories();
-    fetchPublishers();
-    fetchAuthors();
+    dispatch(getAllCategory());
+    dispatch(getAllAuthor());
+    dispatch(getAllPublisher());
+    // fetchCategories();
+    // fetchPublishers();
+    // fetchAuthors();
   }, [showModalAdd]);
-
-  const fetchCategories = async () => {
-    const response = await axios.get("http://localhost:3001/api/category");
-    setCategories(response.data.getallcat);
-  };
-
-  const fetchPublishers = async () => {
-    const response = await axios.get("http://localhost:3001/api/publisher");
-    setPublishers(response.data.getallcat);
-  };
-
-  const fetchAuthors = async () => {
-    const response = await axios.get("http://localhost:3001/api/author");
-    // console.log("data", response.data.getallAuthor);
-    setAuthors(response.data.getallAuthor);
-  };
 
   const clearInput = () => {
     setImage(null);
@@ -108,37 +104,26 @@ const ModalAddProduct = (props) => {
     if (check === true) {
       const formData = new FormData();
       formData.append("name", name);
-      formData.append("image", image);
+      formData.append("image", image, image.name);
       formData.append("price", price);
       formData.append("description", description);
       formData.append("CategoryId", categoryId);
       formData.append("PublisherId", publisherId);
       formData.append("AuthorId", authorId);
-      console.log("data", formData);
-      console.log("name:", name);
-      console.log("image:", image);
-      console.log("price:", price);
-      console.log("description:", description);
-      console.log("CategoryId:", categoryId);
-      console.log("PublisherId:", publisherId);
-      console.log("AuthorId:", authorId);
+   
       try {
-        const response = await axios.post(
-          "http://localhost:3001/api/product",
-          formData,
-          
-        );
-        
-          console.log("product", response.data.newProduct);
-          if (response.data.success) {
-            toast.success(`${response.data.message}`);
+        for (let pair of formData.entries()) {
+          console.log(pair[0] + ", " + pair[1]);
+        }
+        dispatch(handleCreateProduct(formData)).then((res) => {
+          if (res.payload && res.payload.success === true) {
+            toast.success(`${res.payload.message}`);
             clearInput();
           }
+        });
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-
-    
     }
   };
 
@@ -151,7 +136,7 @@ const ModalAddProduct = (props) => {
         <Modal.Body>
           <form>
             <div className="row">
-              <div className="col-6">
+              <div className="col-3">
                 <div className="mb-3">
                   <label className="form-label">Tên sản phẩm:</label>
                   <input
@@ -162,7 +147,7 @@ const ModalAddProduct = (props) => {
                   />
                 </div>
               </div>
-              <div className="col-3">
+              <div className="col-2">
                 <div className="mb-3">
                   <label className="form-label">Giá:</label>
                   <input
@@ -173,7 +158,7 @@ const ModalAddProduct = (props) => {
                   />
                 </div>
               </div>
-              <div className="col-3">
+              <div className="col-7">
                 <div className="mb-3">
                   <label className="form-label">Mô tả:</label>
                   <input
@@ -219,9 +204,9 @@ const ModalAddProduct = (props) => {
                         <option value={categoryId}>
                           Chọn danh mục sản phẩm
                         </option>
-                        {categories &&
-                          categories.length > 0 &&
-                          categories.map((item, index) => {
+                        {listCategory &&
+                          listCategory.length > 0 &&
+                          listCategory.map((item, index) => {
                             return (
                               <option key={index + 1} value={item.id}>
                                 {item.name}
@@ -239,9 +224,9 @@ const ModalAddProduct = (props) => {
                         className="form-select"
                       >
                         <option value={publisherId}>Chọn nhà xuất bản</option>
-                        {publishers &&
-                          publishers.length > 0 &&
-                          publishers.map((item, index) => {
+                        {listPublisher &&
+                          listPublisher.length > 0 &&
+                          listPublisher.map((item, index) => {
                             return (
                               <option key={index + 1} value={item.id}>
                                 {item.name}
@@ -259,9 +244,9 @@ const ModalAddProduct = (props) => {
                         className="form-select"
                       >
                         <option value={authorId}>Chọn tác giả</option>
-                        {authors &&
-                          authors.length > 0 &&
-                          authors.map((item, index) => {
+                        {listAuthor &&
+                          listAuthor.length > 0 &&
+                          listAuthor.map((item, index) => {
                             return (
                               <option key={index + 1} value={item.id}>
                                 {item.name}

@@ -7,22 +7,22 @@ import { useNavigate } from "react-router-dom";
 import { UrlImage } from "../../../url";
 import { useDispatch } from "react-redux";
 
-const UserManage = () => {
+const AuthorManage = () => {
   const navigate = useNavigate();
   const URL_IMAGE = UrlImage();
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
-  const [users, setUsers] = useState([]);
+  const [authors, setAuthors] = useState([]);
   const [showModalAdd, setShowModalAdd] = useState(false);
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/api/user")
+      .get("http://localhost:3001/api/author")
       .then((response) => {
         console.log("data", response.data);
-        setUsers(response.data.users);
+        setAuthors(response.data.getallAuthor);
         setTotalPage(response.data.totalPages);
       })
       .catch((error) => {
@@ -52,41 +52,31 @@ const UserManage = () => {
               <Nav />
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div style={{ color: "gray" }} className="text fs-4">
-                  Quản lý người dùng
+                  Quản lý nhà xuất bản
                 </div>
                 <button
                   onClick={() => displayAdd()}
                   type="button"
                   className="btn btn-primary"
                 >
-                  Thêm người dùng
+                  Thêm nhà xuất bản
                 </button>
               </div>
-              <table className="table caption-top bg-white rounded mt-2">
+              <table className="table caption-top bg-white rounded mt-2 ">
                 <thead>
                   <tr>
                     <th scope="col">STT</th>
                     <th scope="col">ID</th>
-                    <th scope="col">fullname</th>
-                    <th scope="col">email</th>
-                    <th scope="col">phone</th>
-                    <th scope="col">address</th>
-                    <th scope="col">Role</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">name</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {Array.isArray(users) &&
-                    users.map((user, index) => (
-                      <tr key={user.id}>
+                  {Array.isArray(authors) &&
+                    authors.map((authors, index) => (
+                      <tr key={authors.id}>
                         <td>{index + 1}</td>
-                        <td>{user.id}</td>
-                        <td>{user.fullname}</td>
-                        <td>{user.email}</td>
-                        <td>{user.phone}</td>
-                        <td>{user.address}</td>
-                        <td>{user.RoleId}</td>
-                        <td>{user.status}</td>
+                        <td>{authors.id}</td>
+                        <td>{authors.name}</td>
                       </tr>
                     ))}
                 </tbody>
@@ -119,4 +109,4 @@ const UserManage = () => {
   );
 };
 
-export default UserManage;
+export default AuthorManage;

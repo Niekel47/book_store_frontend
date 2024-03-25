@@ -6,6 +6,8 @@ import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import { UrlImage } from "../../../url";
 import { useDispatch } from "react-redux";
+import { MdDelete } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
 
 const CategoryManage = () => {
   const navigate = useNavigate();
@@ -23,6 +25,7 @@ const CategoryManage = () => {
       .then((response) => {
         console.log("data", response.data);
         setCategories(response.data.getallcat);
+        setTotalPage(response.data.totalPages);
       })
       .catch((error) => {
         console.error("There was an error!", error);
@@ -65,6 +68,7 @@ const CategoryManage = () => {
                     <th scope="col">STT</th>
                     <th scope="col">ID</th>
                     <th scope="col">name</th>
+                    <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -74,6 +78,26 @@ const CategoryManage = () => {
                         <td>{index + 1}</td>
                         <td>{category.id}</td>
                         <td>{category.name}</td>
+                        <td>
+                          <MdDelete
+                            style={{
+                              fontSize: "25px",
+                              marginRight: "10px",
+                              cursor: "pointer",
+                              color: "#dc0000",
+                            }}
+                            onClick={() => deleteClick(item.id)}
+                          />
+                          <FaEdit
+                            style={{
+                              fontSize: "23px",
+                              marginRight: "10px",
+                              cursor: "pointer",
+                              color: "#e3c01c",
+                            }}
+                            onClick={() => showEdit(item)}
+                          />
+                        </td>
                       </tr>
                     ))}
                 </tbody>
