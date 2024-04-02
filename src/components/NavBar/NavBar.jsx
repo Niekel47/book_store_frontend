@@ -2,10 +2,11 @@ import React, { useEffect } from "react";
 import Logo from "../../assets/website/logo.png";
 import { FaCartShopping } from "react-icons/fa6";
 import { FaCaretDown } from "react-icons/fa";
-import { profile } from "../../redux/slice/customer/authSlice";
+import { logout, profile } from "../../redux/slice/customer/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Menu = [
   {
@@ -19,7 +20,6 @@ const Menu = [
     link: "/#",
   },
 ];
-
 const DropdownLinks = [
   {
     name: "Trending Books",
@@ -34,9 +34,8 @@ const DropdownLinks = [
     link: "/#",
   },
 ];
-
 const Navbar = ({ handleOrderPopup }) => {
-  const navigate = useNavigate(); // Move inside the component function
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const navigatePage = (page) => {
     navigate(page);
@@ -44,15 +43,24 @@ const Navbar = ({ handleOrderPopup }) => {
   const isSuccessLogin = useSelector(
     (state) => state.customer.auth.isSuccessLogin
   );
+  const isSuccessLogout = useSelector(
+    (state) => state.customer.isSuccessLogout
+  );
   const userProfile = useSelector(
     (state) => state.customer.auth.isSuccessProfile
   );
-
+  const logoutClick = () => {
+    dispatch(logout());
+    localStorage.removeItem("jwt");
+    toast.success("Đăng xuất thành công");
+    navigate("/");
+  };
   useEffect(() => {
-    if (isSuccessLogin) {
-      dispatch(profile()); // Dispatch profile thunk to fetch user profile data
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      dispatch(profile());
     }
-  }, []);
+  }, [isSuccessLogin, isSuccessLogout]);
 
   return (
     <>
@@ -113,25 +121,29 @@ const Navbar = ({ handleOrderPopup }) => {
               </button>
             </div>
           </div>
-
-          <>
-            <NavDropdown title="Tài Khoản" id="collapsible-nav-dropdown">
-              {userProfile && userProfile.fullname && (
+          {userProfile && userProfile.fullname ? (
+            <>
+              <NavDropdown title="Tài Khoản" id="collapsible-nav-dropdown">
                 <NavDropdown.Item>
                   Hello ! {userProfile.fullname}
                 </NavDropdown.Item>
-              )}
-              <NavDropdown.Item onClick={() => logoutClick()}>
-                Đăng Xuất
-              </NavDropdown.Item>
-              <NavDropdown.Item onClick={() => navigatePage("/login")}>
-                Đăng Nhập
-              </NavDropdown.Item>
-              <NavDropdown.Item onClick={() => navigatePage("/register")}>
-                Đăng Ký
-              </NavDropdown.Item>
-            </NavDropdown>
-          </>
+                <NavDropdown.Item onClick={() => logoutClick()}>
+                  Đăng Xuất
+                </NavDropdown.Item>
+              </NavDropdown>
+            </>
+          ) : (
+            <>
+              <NavDropdown title="Tài Khoản" id="collapsible-nav-dropdown">
+                <NavDropdown.Item onClick={() => navigatePage("/login")}>
+                  Đăng Nhập
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => navigatePage("/register")}>
+                  Đăng Ký
+                </NavDropdown.Item>
+              </NavDropdown>
+            </>
+          )}
         </div>
       </div>
     </>

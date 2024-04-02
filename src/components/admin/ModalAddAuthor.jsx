@@ -3,17 +3,11 @@ import axios from "axios";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { toast } from "react-toastify";
-import {
-  getAllCategory,
-  getAllAuthor,
-  getAllPublisher,
-  handleCreateProduct,
-  CreateCategory,
-} from "../../redux/slice/admin/productSlice";
+import { CreateAuthor } from "../../redux/slice/admin/productSlice";
 import { useDispatch, useSelector } from "react-redux";
 import FormData from "form-data";
 
-const ModalAddCategory = (props) => {
+const ModalAddAuthor = (props) => {
   const { showModalAdd, handleClose } = props;
   const [name, setName] = useState("");
 
@@ -45,10 +39,9 @@ const ModalAddCategory = (props) => {
       if (name) {
         // Check if name is defined
         try {
-          dispatch(CreateCategory(data)).then((res) => {
+          dispatch(CreateAuthor(data)).then((res) => {
             toast.success("Thêm thành công");
             clearInput();
-            
           });
         } catch (error) {
           console.error(error);
@@ -63,14 +56,14 @@ const ModalAddCategory = (props) => {
     <>
       <Modal size="xl" show={showModalAdd} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>THÊM DANH MỤC</Modal.Title>
+          <Modal.Title>THÊM TÁC GIẢ</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form>
             <div className="row">
               <div className="col-6">
                 <div className="mb-3">
-                  <label className="form-label">Tên danh mục:</label>
+                  <label className="form-label">Tên tác giả:</label>
                   <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -99,4 +92,4 @@ const ModalAddCategory = (props) => {
   );
 };
 
-export default ModalAddCategory;
+export default ModalAddAuthor;

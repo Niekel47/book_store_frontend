@@ -3,8 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import Home from "./components/Home/Home";
-import ProductList from "./components/ProductList/ProductList";
 import "aos/dist/aos.css";
 import CustomerRoute from "./routes/CustomerRoute";
 import AdminRoute from "./routes/Admin";

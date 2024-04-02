@@ -1,119 +1,124 @@
-import React from "react";
-
+import React, { useEffect } from "react";
+import NavDropdown from "react-bootstrap/NavDropdown";
 import { RiDashboard3Fill } from "react-icons/ri";
 import { BsFillCartFill } from "react-icons/bs";
 import { FaBagShopping } from "react-icons/fa6";
 import { IoLogOutOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 // import { logout } from "../../redux/silce/admin/authSlice";
 import { toast } from "react-toastify";
+import { logoutAdmin, profileAdmin } from "../../redux/slice/admin/authSlice";
 const Sidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const logoutClick = () => {
-  //   dispatch(logoutAdmin()).then((res) => {
-  //     if (res.payload && res.payload.success === true) {
-  //       toast.success(`${res.payload.message}`);
-  //     }
-  //   });
-  //   dispatch(logout());
-  //   localStorage.removeItem("jwt_admin");
-  //   toast.success("Đăng xuất thành công");
-  //   navigate("/admin");
-  // };
+  const adminProfile = useSelector(
+    (state) => state.admin.auth.isSuccessProfileAdmin
+  );
+  const isSuccessLoginAdmin = useSelector(
+    (state) => state.customer.auth.isSuccessLoginAdmin
+  );
+  useEffect(() => {
+    const token = localStorage.getItem("jwt_admin");
+    if (token) {
+      dispatch(profileAdmin());
+    }
+  }, [isSuccessLoginAdmin]);
+  const logoutClick = () => {
+    dispatch(logoutAdmin()).then((res) => {
+      if (res.payload && res.payload.success === true) {
+        toast.success(`${res.payload.message}`);
+      }
+    });
+    localStorage.removeItem("jwt_admin");
+    navigate("/admin");
+  };
   return (
     <div className="bg-white sidebar p-2">
+      {adminProfile && adminProfile.fullname ? (
+        <>
+          <NavDropdown title="Tài Khoản" id="collapsible-nav-dropdown">
+            <NavDropdown.Item>Hello ! {adminProfile.fullname}</NavDropdown.Item>
+            <NavDropdown.Item onClick={() => logoutClick()}>
+              Đăng Xuất
+            </NavDropdown.Item>
+          </NavDropdown>
+        </>
+      ) : (
+        <>
+          <NavDropdown title="Tài Khoản" id="collapsible-nav-dropdown">
+            <NavDropdown.Item onClick={() => navigate("/admin/login")}>
+              Đăng Nhập
+            </NavDropdown.Item>
+          </NavDropdown>
+        </>
+      )}
+      <hr className="text-dark" />
       <div className="m-2">
         <img src="" alt="" />
         <p>Admin</p>
       </div>
-      <hr className="text-dark" />
       <div>
         <div
           onClick={() => navigate("/admin")}
-          style={{ cursor: "pointer" }}
-          className="list-group-item py-2"
+          className="list-group-item py-2 cursor-pointer"
         >
-          <RiDashboard3Fill
-            style={{ fontSize: "30px", color: "blue", marginRight: "5px" }}
-          />
+          <RiDashboard3Fill className="text-3xl text-blue-500 mr-1" />
           <span>Dashboard</span>
         </div>
         <div
           onClick={() => navigate("/admin/orders")}
-          style={{ cursor: "pointer" }}
-          className="list-group-item py-2 "
+          className="list-group-item py-2 cursor-pointer"
         >
-          <BsFillCartFill
-            style={{ fontSize: "30px", color: "blue", marginRight: "5px" }}
-          />
-          <span>Đơn Hàng</span>
+          <BsFillCartFill className="text-3xl text-blue-500 mr-1" />
+          <span>Quản Lý Đơn Hàng</span>
         </div>
 
         <div
           onClick={() => navigate("/admin/product")}
-          style={{ cursor: "pointer" }}
-          className="list-group-item py-2 "
+          className="list-group-item py-2 cursor-pointer"
         >
-          <FaBagShopping
-            style={{ fontSize: "30px", color: "blue", marginRight: "5px" }}
-          />
-          <span>Sản Phẩm</span>
+          <FaBagShopping className="text-3xl text-blue-500 mr-1" />
+          <span> Quản Lý Sản Phẩm</span>
         </div>
 
         <div
-          style={{ cursor: "pointer" }}
-          className="list-group-item py-2 "
+          className="list-group-item py-2 cursor-pointer "
           onClick={() => navigate("/admin/category")}
         >
-          <FaBagShopping
-            style={{ fontSize: "30px", color: "blue", marginRight: "5px" }}
-          />
+          <FaBagShopping className="text-3xl text-blue-500 mr-1" />
           <span>Quản lý danh mục</span>
         </div>
 
         <div
-          style={{ cursor: "pointer" }}
-          className="list-group-item py-2 "
+          className="list-group-item py-2 cursor-pointer"
           onClick={() => navigate("/admin/publisher")}
         >
-          <FaBagShopping
-            style={{ fontSize: "30px", color: "blue", marginRight: "5px" }}
-          />
+          <FaBagShopping className="text-3xl text-blue-500 mr-1" />
           <span>Quản lý nhà xuất bản</span>
         </div>
 
         <div
-          style={{ cursor: "pointer" }}
-          className="list-group-item py-2 "
+          className="list-group-item py-2 cursor-pointer"
           onClick={() => navigate("/admin/author")}
         >
-          <FaBagShopping
-            style={{ fontSize: "30px", color: "blue", marginRight: "5px" }}
-          />
+          <FaBagShopping className="text-3xl text-blue-500 mr-1" />
           <span>Quản lý tác giả</span>
         </div>
 
         <div
-          style={{ cursor: "pointer" }}
-          className="list-group-item py-2 "
+          className="list-group-item py-2 cursor-pointer"
           onClick={() => navigate("/admin/user")}
         >
-          <FaBagShopping
-            style={{ fontSize: "30px", color: "blue", marginRight: "5px" }}
-          />
+          <FaBagShopping className="text-3xl text-blue-500 mr-1" />
           <span>Quản lý người dùng</span>
         </div>
 
         <div
           onClick={() => logoutClick()}
-          style={{ cursor: "pointer" }}
-          className="list-group-item py-2 "
+          className="list-group-item py-2 cursor-pointer"
         >
-          <IoLogOutOutline
-            style={{ fontSize: "30px", color: "blue", marginRight: "5px" }}
-          />
+          <IoLogOutOutline className="text-3xl text-blue-500 mr-1" />
           <span>Đăng Xuất</span>
         </div>
       </div>

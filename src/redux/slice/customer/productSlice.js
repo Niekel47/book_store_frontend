@@ -5,6 +5,9 @@ import { UrlApi } from "../../../../url.js";
 const URL_API = UrlApi();
 const initialState = {
   listProduct: [],
+  listCategory: [],
+  listAuthor: [],
+  listPublisher: [],
   listProductSearch: [],
   totalPage: 0,
   isLoading: false,
@@ -26,6 +29,55 @@ export const fetchProductHome = createAsyncThunk(
     }
   }
 );
+
+export const fetchAllProduct = createAsyncThunk(
+  "product/fetchAllProduct",
+  async () => {
+    try {
+      const res = await axios.get(URL_API + `product`);
+      return res.data.products;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const fetchAllCategory = createAsyncThunk(
+  "product/fetchAllCategory",
+  async () => {
+    try {
+      const res = await axios.get(URL_API + `category`);
+      return res.data.getallcat;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const fetchAllAuthor = createAsyncThunk("product/fetchAllAuthor", async () => {
+  try {
+    const res = await axios.get(URL_API + `author`);
+    return res.data.getallAuthor;
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+export const fetchAllPublisher = createAsyncThunk(
+  "product/fetchAllPublisher",
+  async () => {
+    try {
+      const res = await axios.get(URL_API + `publisher`);
+      return res.data.getPublisher;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+
+
+
 
 export const getProductDetail = createAsyncThunk(
   "product/getProductDetail",
@@ -71,6 +123,70 @@ export const productSlice = createSlice({
       })
       .addCase(fetchProductHome.rejected, (state, action) => {
         state.listProduct = [];
+        state.isLoading = false;
+        state.isError = true;
+      })
+      //Get All Product
+      .addCase(fetchAllProduct.pending, (state, action) => {
+        state.listProduct = [];
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(fetchAllProduct.fulfilled, (state, action) => {
+        state.listProduct = action.payload;
+        state.isLoading = false;
+        state.isError = false;
+      })
+      .addCase(fetchAllProduct.rejected, (state, action) => {
+        state.listProduct = [];
+        state.isLoading = false;
+        state.isError = true;
+      })
+      //Get All Category
+      .addCase(fetchAllCategory.pending, (state, action) => {
+        state.listCategory = [];
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(fetchAllCategory.fulfilled, (state, action) => {
+        state.listCategory = action.payload;
+        state.isLoading = false;
+        state.isError = false;
+      })
+      .addCase(fetchAllCategory.rejected, (state, action) => {
+        state.listCategory = [];
+        state.isLoading = false;
+        state.isError = true;
+      })
+      //Get All Author
+      .addCase(fetchAllAuthor.pending, (state, action) => {
+        state.listAuthor = [];
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(fetchAllAuthor.fulfilled, (state, action) => {
+        state.listAuthor = action.payload;
+        state.isLoading = false;
+        state.isError = false;
+      })
+      .addCase(fetchAllAuthor.rejected, (state, action) => {
+        state.listAuthor = [];
+        state.isLoading = false;
+        state.isError = true;
+      })
+      //Get All Publisher
+      .addCase(fetchAllPublisher.pending, (state, action) => {
+        state.listPublisher = [];
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(fetchAllPublisher.fulfilled, (state, action) => {
+        state.listPublisher = action.payload;
+        state.isLoading = false;
+        state.isError = false;
+      })
+      .addCase(fetchAllPublisher.rejected, (state, action) => {
+        state.listPublisher = [];
         state.isLoading = false;
         state.isError = true;
       })

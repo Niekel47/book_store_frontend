@@ -20,9 +20,8 @@ const ProductManage = () => {
   const navigate = useNavigate();
   const URL_IMAGE = UrlImage();
   const [toggle, setToggle] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
-  // const [listProduct, setListProduct] = useState([]);
   const [showModalAdd, setShowModalAdd] = useState(false);
   const [showModalEdit, setShowModalEdit] = useState(false);
   const [productEdit, setProductEdit] = useState({});
@@ -33,22 +32,25 @@ const ProductManage = () => {
   const createProduct = useSelector(
     (state) => state.admin.product.createProduct
   );
+  const updateProduct = useSelector(
+    (state) => state.admin.product.updateProduct
+  );
   const listProducts = useSelector((state) => state.admin.product.listProduct);
-  const totalPages = useSelector((state) => state.admin.product.totalPages); // Sử dụng selector để lấy totalPages từ store
-  //    const createproduct = useSelector(
-  //      (state) => state.admin.product.storeProduct
-  //    );
+  const Pagecount = useSelector((state) => state.admin.product.totalPages);
 
   const Toggle = () => {
     setToggle(!toggle);
   };
   useEffect(() => {
-    // fetchAllProduct();
-    dispatch(getAllProduct(currentPage));
-  }, [currentPage, deleteProduct, createProduct]);
+    dispatch(getAllProduct(page)).then((res) => {
+      setTotalPage(Pagecount);
+    });
+  }, [page, deleteProduct, createProduct, updateProduct]);
 
   const handlePageClick = (e) => {
-    setCurrentPage(e.selected + 1);
+    const currentPage = e.selected + 1;
+    setPage(currentPage);
+    dispatch(getAllProduct(currentPage));
   };
   const handleCloseEdit = () => {
     setShowModalEdit(false);
@@ -71,10 +73,7 @@ const ProductManage = () => {
 
   return (
     <>
-      <div
-        style={{ backgroundColor: "#f0f0f0" }}
-        className="container-fluid bg min-vh-100 "
-      >
+      <div className="container-fluid bg min-vh-100 bg-gray-300 ">
         <div className="row ">
           {toggle && (
             <div className="col-4 col-md-2 bg-white vh-100 position-fixed">
@@ -94,14 +93,12 @@ const ProductManage = () => {
           <div className="col">
             <div className="px-3">
               <Nav Toggle={Toggle} />
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div style={{ color: "gray" }} className="text fs-4">
-                  QUẢN LÝ SẢN PHẨM
-                </div>
+              <div className="flex justify-between">
+                <div className="text-gray-500 text-2xl">Quản lý sản phẩm</div>
                 <button
                   onClick={() => displayAdd()}
                   type="button"
-                  className="btn btn-primary"
+                  className="btn btn-primary bg-blue-800"
                 >
                   THÊM SẢN PHẨM
                 </button>
@@ -113,47 +110,48 @@ const ProductManage = () => {
                     <th scope="col">Ảnh</th>
                     <th scope="col">Tên</th>
                     <th scope="col">Giá</th>
-                    {/* <th scope="col">Description</th> */}
                     <th scope="col">Action</th>
+                    {/* <th scope="col">Description</th> */}
                   </tr>
                 </thead>
                 <tbody>
-                  {Array.isArray(listProducts) &&
-                    listProducts.map((item, index) => (
-                      <tr key={item.id}>
-                        <td>{index + 1}</td>
-                        <td>
-                          <img
-                            width={"100px"}
-                            src={URL_IMAGE + item.image}
-                            alt=""
-                          />
-                        </td>
-                        <td>{item.name}</td>
-                        <td>{item.price.toLocaleString("vi-VN")} đ</td>
-                        {/* <td>{item.description}</td> */}
-                        <td>
-                          <MdDelete
+                  {listProducts &&
+                    listProducts.length > 0 &&
+                    listProducts.map((item, index) => {
+                      const displayIndex = (page - 1) * 5 + index + 1;
+                      return (
+                        <tr key={index}>
+                          <th scope="row">{displayIndex}</th>
+
+                          <td style={{ width: "150px" }}>
+                            <img
+                              width={"100px"}
+                              src={URL_IMAGE + item.image}
+                              alt=""
+                            />
+                          </td>
+                          <td style={{ width: "400px" }}>{item.name}</td>
+                          <td
                             style={{
-                              fontSize: "25px",
-                              marginRight: "10px",
-                              cursor: "pointer",
-                              color: "#dc0000",
+                              color: "#883731",
+                              fontWeight: "bold",
                             }}
-                            onClick={() => deleteClick(item.id)}
-                          />
-                          <FaEdit
-                            style={{
-                              fontSize: "23px",
-                              marginRight: "10px",
-                              cursor: "pointer",
-                              color: "#e3c01c",
-                            }}
-                            onClick={() => showEdit(item)}
-                          />
-                        </td>
-                      </tr>
-                    ))}
+                          >
+                            {item.price.toLocaleString("vi-VN")} đ
+                          </td>
+                          <td>
+                            <MdDelete
+                              className="text-2xl mr-2 cursor-pointer text-red-700"
+                              onClick={() => deleteClick(item.id)}
+                            />
+                            <FaEdit
+                              className="text-2xl mr-2 cursor-pointer text-yellow-500 ml-1"
+                              onClick={() => showEdit(item)}
+                            />
+                          </td>
+                        </tr>
+                      );
+                    })}
                 </tbody>
               </table>
               <ReactPaginate
@@ -161,7 +159,7 @@ const ProductManage = () => {
                 onPageChange={(e) => handlePageClick(e)}
                 pageRangeDisplayed={3}
                 marginPagesDisplayed={2}
-                pageCount={totalPages}
+                pageCount={Pagecount}
                 previousLabel="< "
                 pageClassName="page-item"
                 pageLinkClassName="page-link"

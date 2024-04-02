@@ -2,6 +2,7 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import productReducer from "./slice/customer/productSlice";
 import authReducer from "./slice/customer/authSlice";
 import productAdminReducer from "./slice/admin/productSlice";
+import authAdminReducer from "./slice/admin/authSlice";
 
 const rootReducer = combineReducers({
   customer: combineReducers({
@@ -16,6 +17,8 @@ const rootReducer = combineReducers({
   admin: combineReducers({
     //  order: orderAdminReducer,
     product: productAdminReducer,
+    auth: authAdminReducer,
+
     //  auth: authAdminReducer,
   }),
 });

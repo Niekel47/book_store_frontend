@@ -5,61 +5,85 @@ import Nav from "../../components/admin/Nav";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import { UrlImage } from "../../../url";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+// import { getAllAuthor } from "../../redux/slice/admin/ListPageSlice";
+import {
+  getAllAuthor,
+  handleDeleteAuthor,
+} from "../../redux/slice/admin/productSlice";
+import { MdDelete } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+import ModalAddAuthor from "../../components/admin/ModalAddAuthor";
+import { toast } from "react-toastify";
 
 const AuthorManage = () => {
   const navigate = useNavigate();
-  const URL_IMAGE = UrlImage();
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
-  const [authors, setAuthors] = useState([]);
   const [showModalAdd, setShowModalAdd] = useState(false);
+  const listAuthor = useSelector((state) => state.admin.product.listAuthor);
+  const deleteAuthor = useSelector((state) => state.admin.product.deleteAuthor);
+  const createAuthor = useSelector((state) => state.admin.product.createAuthor);
+  const totalPages = useSelector(
+    (state) => state.admin.product.totalPagesAuthor
+  );
+  console.log("totalPages", totalPages);
+  // console.log("Pagecount", Pagecount);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/api/author")
-      .then((response) => {
-        console.log("data", response.data);
-        setAuthors(response.data.getallAuthor);
-        setTotalPage(response.data.totalPages);
-      })
-      .catch((error) => {
-        console.error("There was an error!", error);
-      });
-  }, []);
+    dispatch(getAllAuthor(page)).then((res) => {
+      // const Pagecount = res;
+      setTotalPage(totalPages);
+    });
+  }, [page, createAuthor, deleteAuthor]);
 
   const handlePageClick = (e) => {
-    setPage(e.selected + 1);
+    const currentPage = e.selected + 1;
+    setPage(currentPage);
+    dispatch(getAllAuthor(currentPage));
+  };
+
+  const displayAdd = () => {
+    setShowModalAdd(true);
+  };
+
+  const handleClose = () => {
+    setShowModalAdd(false);
+  };
+
+  const deleteClick = async (author_id) => {
+    dispatch(handleDeleteAuthor(author_id)).then((res) => {
+      toast.success("Xoa thanh cong");
+    });
   };
 
   return (
     <>
-      <div
-        style={{ backgroundColor: "#f0f0f0" }}
-        className="container-fluid bg min-vh-100 "
-      >
+      <div className="container-fluid bg min-vh-100 bg-gray-300 ">
         <div className="row ">
           <div className="col-4 col-md-2 bg-white vh-100 position-fixed">
             <Sidebar />
           </div>
 
           {<div className="col-4 col-md-2"></div>}
+          <ModalAddAuthor
+            showModalAdd={showModalAdd}
+            handleClose={handleClose}
+          />
 
           <div className="col">
             <div className="px-3">
               <Nav />
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div style={{ color: "gray" }} className="text fs-4">
-                  Quản lý nhà xuất bản
-                </div>
+              <div className="flex justify-between">
+                <div className="text-gray-500 text-2xl">Quản lý tác giả</div>
                 <button
                   onClick={() => displayAdd()}
                   type="button"
-                  className="btn btn-primary"
+                  className="btn btn-primary bg-blue-800"
                 >
-                  Thêm nhà xuất bản
+                  Thêm tác giả
                 </button>
               </div>
               <table className="table caption-top bg-white rounded mt-2 ">
@@ -68,15 +92,26 @@ const AuthorManage = () => {
                     <th scope="col">STT</th>
                     <th scope="col">ID</th>
                     <th scope="col">name</th>
+                    <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {Array.isArray(authors) &&
-                    authors.map((authors, index) => (
+                  {Array.isArray(listAuthor) &&
+                    listAuthor.map((authors, index) => (
                       <tr key={authors.id}>
                         <td>{index + 1}</td>
                         <td>{authors.id}</td>
                         <td>{authors.name}</td>
+                        <td>
+                          <MdDelete
+                            className="text-2xl mr-2 cursor-pointer text-red-700"
+                            onClick={() => deleteClick(authors.id)}
+                          />
+                          <FaEdit
+                            className="text-2xl mr-2 cursor-pointer text-yellow-500 ml-1"
+                            onClick={() => showEdit(authors)}
+                          />
+                        </td>
                       </tr>
                     ))}
                 </tbody>
@@ -86,7 +121,7 @@ const AuthorManage = () => {
                 onPageChange={(e) => handlePageClick(e)}
                 pageRangeDisplayed={3}
                 marginPagesDisplayed={2}
-                pageCount={totalPage}
+                pageCount={totalPages}
                 previousLabel="< "
                 pageClassName="page-item"
                 pageLinkClassName="page-link"

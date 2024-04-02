@@ -5,7 +5,15 @@ import Nav from "../../components/admin/Nav";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import { UrlImage } from "../../../url";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getAllPublisher,
+  handleDeletePublisher,
+} from "../../redux/slice/admin/productSlice";
+import { MdDelete } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+import { toast } from "react-toastify";
+import ModalAddPublisher from "../../components/admin/ModalAddPublisher";
 
 const PublisherManage = () => {
   const navigate = useNavigate();
@@ -16,48 +24,63 @@ const PublisherManage = () => {
   const [totalPage, setTotalPage] = useState(0);
   const [publishers, setPublishers] = useState([]);
   const [showModalAdd, setShowModalAdd] = useState(false);
+  const listPublisher = useSelector(
+    (state) => state.admin.product.listPublisher
+  );
+  const deletePublisher = useSelector(
+    (state) => state.admin.product.deletePublisher
+  );
+  const createPublisher = useSelector(
+    (state) => state.admin.product.createPublisher
+  );
+
+  const totalPagesPublihser = useSelector(
+    (state) => state.admin.product.totalPagesPublihser
+  );
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/api/publisher")
-      .then((response) => {
-        console.log("data", response.data);
-        setPublishers(response.data.getPublisher);
-        setTotalPage(response.data.totalPages);
-      })
-      .catch((error) => {
-        console.error("There was an error!", error);
-      });
-  }, []);
+    dispatch(getAllPublisher(page));
+    setTotalPage(totalPagesPublihser);
+  }, [page, deletePublisher, createPublisher]);
 
   const handlePageClick = (e) => {
     setPage(e.selected + 1);
   };
+  const handleClose = () => {
+    setShowModalAdd(false);
+  };
+  const displayAdd = () => {
+    setShowModalAdd(true);
+  };
+  const deleteClick = async (publisher_id) => {
+    dispatch(handleDeletePublisher(publisher_id)).then((res) => {
+      toast.success("Xoa thanh cong");
+    });
+  };
 
   return (
     <>
-      <div
-        style={{ backgroundColor: "#f0f0f0" }}
-        className="container-fluid bg min-vh-100 "
-      >
+      <div className="container-fluid bg min-vh-100 bg-gray-300 ">
         <div className="row ">
           <div className="col-4 col-md-2 bg-white vh-100 position-fixed">
             <Sidebar />
           </div>
 
           {<div className="col-4 col-md-2"></div>}
+          <ModalAddPublisher
+            showModalAdd={showModalAdd}
+            handleClose={handleClose}
+          />
 
           <div className="col">
             <div className="px-3">
               <Nav />
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div style={{ color: "gray" }} className="text fs-4">
-                  Quản lý nhà xuất bản
-                </div>
+              <div className="flex justify-between">
+                <div className="text-gray-500 text-2xl">Quản lý NXB</div>
                 <button
                   onClick={() => displayAdd()}
                   type="button"
-                  className="btn btn-primary"
+                  className="btn btn-primary bg-blue-800"
                 >
                   Thêm nhà xuất bản
                 </button>
@@ -68,15 +91,26 @@ const PublisherManage = () => {
                     <th scope="col">STT</th>
                     <th scope="col">ID</th>
                     <th scope="col">name</th>
+                    <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {Array.isArray(publishers) &&
-                    publishers.map((publisher, index) => (
+                  {Array.isArray(listPublisher) &&
+                    listPublisher.map((publisher, index) => (
                       <tr key={publisher.id}>
                         <td>{index + 1}</td>
                         <td>{publisher.id}</td>
                         <td>{publisher.name}</td>
+                        <td>
+                          <MdDelete
+                            className="text-2xl mr-2 cursor-pointer text-red-700"
+                            onClick={() => deleteClick(publisher.id)}
+                          />
+                          <FaEdit
+                            className="text-2xl mr-2 cursor-pointer text-yellow-500 ml-1"
+                            onClick={() => showEdit(publisher)}
+                          />
+                        </td>
                       </tr>
                     ))}
                 </tbody>
@@ -86,7 +120,7 @@ const PublisherManage = () => {
                 onPageChange={(e) => handlePageClick(e)}
                 pageRangeDisplayed={3}
                 marginPagesDisplayed={2}
-                pageCount={totalPage}
+                pageCount={totalPagesPublihser}
                 previousLabel="< "
                 pageClassName="page-item"
                 pageLinkClassName="page-link"

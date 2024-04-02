@@ -1,4 +1,6 @@
 import React from "react";
+import { profileAdmin } from "../../redux/slice/admin/authSlice";
+
 
 const Nav = () => {
   return (
@@ -19,13 +21,6 @@ const Nav = () => {
       >
         <i className="bi bi-justify"></i>
       </button>
-      <div className="collapse navbar-collapse" id="collapsibleNavId">
-        <ul className="navbar-nav ms-auto mt-2 mt-lg-0">
-          <li className="nav-item">
-            <i style={{ color: "#e28585", fontWeight: "bold" }}>Xin chào !</i>{" "}
-          </li>
-        </ul>
-      </div>
     </nav>
   );
 };

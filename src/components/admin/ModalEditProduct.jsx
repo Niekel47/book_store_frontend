@@ -5,9 +5,11 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllCategory,
+  getAllAuthor,
+  getAllPublisher,
   handleUpdateProduct,
-} from "../../redux/slice/admin/productSlice";
-import { UrlImage } from "../../../url";
+} from "../../redux/slice/admin/productSlice.js";
+import { UrlImage } from "../../../url.js";
 
 const ModalEditProduct = (props) => {
   const URL_IMAGE = UrlImage();
@@ -17,25 +19,34 @@ const ModalEditProduct = (props) => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [categoryId, setCategoryId] = useState("");
+  const [CategoryIds, setCategoryIds] = useState("");
+  const [AuthorId, setAuthorId] = useState("");
+  const [PublisherId, setPublisherId] = useState("");
   const [description, setDescription] = useState("");
-  const { listCategory } = useSelector((state) => state.admin.product);
+
+  const { listCategory, listPublisher, listAuthor } = useSelector(
+    (state) => state.admin.product
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAllCategory());
+    dispatch(getAllAuthor());
+    dispatch(getAllPublisher());
     setProductEdit();
-    if (!showModalEdit) {
+    if (productEdit) {
       setProductEdit();
     }
-  }, [showModalEdit, productEdit]);
+  }, [showModalEdit]);
 
   const setProductEdit = () => {
-    setName(productEdit.name);
-    setPrice(productEdit.price);
-    setQuantity(productEdit.quantity);
-    setCategoryId(productEdit.CategoryId);
-    setDescription(productEdit.description);
+    setName(productEdit.name || "");
+    setPrice(productEdit.price || "");
+    setQuantity(productEdit.quantity || "");
+    setAuthorId(productEdit.AuthorId || "");
+    setCategoryIds("");
+    setPublisherId(productEdit.PublisherId || "");
+    setDescription(productEdit.description || "");
     setImageAvatar(null);
     setImage(null);
   };
@@ -85,7 +96,6 @@ const ModalEditProduct = (props) => {
     }
   };
   const submitEdit = async () => {
-    console.log("productEdit:", productEdit);
     let check = isValidAdd();
     if (check === true) {
       const formData = new FormData();
@@ -98,18 +108,24 @@ const ModalEditProduct = (props) => {
       }
       formData.append("price", price);
       formData.append("quantity", quantity);
-      formData.append("category_id", categoryId);
+      formData.append("CategoryIds", CategoryIds);
+      formData.append("AuthorId", AuthorId);
+      formData.append("PublisherId", PublisherId);
       formData.append("description", description);
-       try {
-         dispatch(handleUpdateProduct(formData)).then((res) => {
-           if (res.payload && res.payload.success === true) {
-             toast.success(`${res.payload.message}`);
-             
-           }
-         });
-       } catch (error) {
-         console.error(error);
-       }
+      console.log("CategoryIds", CategoryIds);
+      try {
+        dispatch(
+          handleUpdateProduct({ product_id: productEdit.id, formData })
+        ).then((res) => {
+          console.log("res.payload", res);
+
+          if (res.payload && res.payload.success === true) {
+            toast.success(`${res.payload.message}`);
+          }
+        });
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
   return (
@@ -121,7 +137,7 @@ const ModalEditProduct = (props) => {
         <Modal.Body>
           <form>
             <div className="row">
-              <div className="col-6">
+              <div className="col-2">
                 <div className="mb-3">
                   <label className="form-label">Tên sản phẩm:</label>
                   <input
@@ -132,7 +148,7 @@ const ModalEditProduct = (props) => {
                   />
                 </div>
               </div>
-              <div className="col-3">
+              <div className="col-2">
                 <div className="mb-3">
                   <label className="form-label">Giá:</label>
                   <input
@@ -143,12 +159,23 @@ const ModalEditProduct = (props) => {
                   />
                 </div>
               </div>
-              <div className="col-3">
+              <div className="col-2">
                 <div className="mb-3">
                   <label className="form-label">Số lượng:</label>
                   <input
                     value={quantity}
                     onChange={(e) => setQuantity(e.target.value)}
+                    type="text"
+                    className="form-control"
+                  />
+                </div>
+              </div>
+              <div className="col-6">
+                <div className="mb-3">
+                  <label className="form-label">Mô tả:</label>
+                  <input
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                     type="text"
                     className="form-control"
                   />
@@ -160,7 +187,9 @@ const ModalEditProduct = (props) => {
                 <img
                   width={"100%"}
                   src={
-                    imageAvatar ? imageAvatar : URL_IMAGE + productEdit.image
+                    imageAvatar
+                      ? imageAvatar
+                      : "https://png.pngtree.com/png-vector/20190614/ourlarge/pngtree-cameraimagephotopicture-blue-icon-on-abstract-cloud-backgr-png-image_1475517.jpg"
                   }
                   alt=""
                 />
@@ -177,19 +206,54 @@ const ModalEditProduct = (props) => {
                       />
                     </div>
                   </div>
+
                   <div className="col-6">
                     <div className="mb-3">
                       <label className="form-label">Danh mục:</label>
+                      {listCategory &&
+                        listCategory.length > 0 &&
+                        listCategory.map((item, index) => {
+                          return (
+                            <div key={index + 1}>
+                              <input
+                                type="checkbox"
+                                id={`category-${item.id}`}
+                                value={item.id}
+                                onChange={(e) => {
+                                  if (e.target.checked) {
+                                    setCategoryIds([
+                                      ...CategoryIds,
+                                      e.target.value,
+                                    ]);
+                                  } else {
+                                    setCategoryIds(
+                                      CategoryIds.filter(
+                                        (id) => id !== e.target.value
+                                      )
+                                    );
+                                  }
+                                }}
+                              />
+                              <label htmlFor={`category-${item.id}`}>
+                                {item.name}
+                              </label>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  </div>
+
+                  <div className="col-6">
+                    <div className="mb-3">
+                      <label className="form-label">Nhà xuất bản:</label>
                       <select
-                        onChange={(e) => setCategoryId(e.target.value)}
+                        onChange={(e) => setPublisherId(e.target.value)}
                         className="form-select"
                       >
-                        <option value={categoryId}>
-                          Chọn danh mục sản phẩm
-                        </option>
-                        {listCategory &&
-                          listCategory.length > 0 &&
-                          listCategory.map((item, index) => {
+                        <option value={PublisherId}>Chọn nhà xuất bản</option>
+                        {listPublisher &&
+                          listPublisher.length > 0 &&
+                          listPublisher.map((item, index) => {
                             return (
                               <option key={index + 1} value={item.id}>
                                 {item.name}
@@ -199,23 +263,25 @@ const ModalEditProduct = (props) => {
                       </select>
                     </div>
                   </div>
-                </div>
-                <div>
-                  <div className="mb-3">
-                    <label
-                      htmlFor="exampleFormControlTextarea1"
-                      className="form-label"
-                    >
-                      Mô tả:
-                    </label>
-                    <textarea
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      style={{ width: "100%", height: "200px" }}
-                      className="form-control"
-                      id="exampleFormControlTextarea1"
-                      rows="3"
-                    ></textarea>
+                  <div className="col-6">
+                    <div className="mb-3">
+                      <label className="form-label">Tác giả:</label>
+                      <select
+                        onChange={(e) => setAuthorId(e.target.value)}
+                        className="form-select"
+                      >
+                        <option value={AuthorId}>Chọn tác giả</option>
+                        {listAuthor &&
+                          listAuthor.length > 0 &&
+                          listAuthor.map((item, index) => {
+                            return (
+                              <option key={index + 1} value={item.id}>
+                                {item.name}
+                              </option>
+                            );
+                          })}
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>

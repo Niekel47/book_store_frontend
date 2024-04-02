@@ -5,7 +5,14 @@ import Nav from "../../components/admin/Nav";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import { UrlImage } from "../../../url";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getAllUser,
+  handleDeleteUser,
+} from "../../redux/slice/admin/productSlice";
+import { MdDelete } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const UserManage = () => {
   const navigate = useNavigate();
@@ -16,30 +23,36 @@ const UserManage = () => {
   const [totalPage, setTotalPage] = useState(0);
   const [users, setUsers] = useState([]);
   const [showModalAdd, setShowModalAdd] = useState(false);
+  const listUsers = useSelector((state) => state.admin.product.listUser);
+  const deleteuser = useSelector((state) => state.admin.product.deleteUser);
+  const totalPages = useSelector((state) => state.admin.product.totalPagesUser);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/api/user")
-      .then((response) => {
-        console.log("data", response.data);
-        setUsers(response.data.users);
-        setTotalPage(response.data.totalPages);
-      })
-      .catch((error) => {
-        console.error("There was an error!", error);
-      });
-  }, []);
+    dispatch(getAllUser());
+    setTotalPage(totalPages);
+  }, [deleteuser]);
 
   const handlePageClick = (e) => {
     setPage(e.selected + 1);
   };
 
+  const displayAdd = () => {
+    setShowModalAdd(true);
+  };
+
+  const handleClose = () => {
+    setShowModalAdd(false);
+  };
+
+  const deleteClick = async (user_id) => {
+    dispatch(handleDeleteUser(user_id)).then((res) => {
+      toast.success("Xoa thanh cong");
+    });
+  };
+
   return (
     <>
-      <div
-        style={{ backgroundColor: "#f0f0f0" }}
-        className="container-fluid bg min-vh-100 "
-      >
+      <div className="container-fluid bg min-vh-100 bg-gray-300 ">
         <div className="row ">
           <div className="col-4 col-md-2 bg-white vh-100 position-fixed">
             <Sidebar />
@@ -50,43 +63,41 @@ const UserManage = () => {
           <div className="col">
             <div className="px-3">
               <Nav />
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div style={{ color: "gray" }} className="text fs-4">
-                  Quản lý người dùng
-                </div>
-                <button
-                  onClick={() => displayAdd()}
-                  type="button"
-                  className="btn btn-primary"
-                >
-                  Thêm người dùng
-                </button>
+              <div className="flex justify-between">
+                <div className="text-gray-500 text-2xl">Quản lý người dùng</div>
               </div>
               <table className="table caption-top bg-white rounded mt-2">
                 <thead>
                   <tr>
                     <th scope="col">STT</th>
-                    <th scope="col">ID</th>
                     <th scope="col">fullname</th>
                     <th scope="col">email</th>
                     <th scope="col">phone</th>
                     <th scope="col">address</th>
                     <th scope="col">Role</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {Array.isArray(users) &&
-                    users.map((user, index) => (
+                  {Array.isArray(listUsers) &&
+                    listUsers.map((user, index) => (
                       <tr key={user.id}>
                         <td>{index + 1}</td>
-                        <td>{user.id}</td>
                         <td>{user.fullname}</td>
                         <td>{user.email}</td>
                         <td>{user.phone}</td>
                         <td>{user.address}</td>
                         <td>{user.RoleId}</td>
-                        <td>{user.status}</td>
+                        <td>
+                          <MdDelete
+                            className="text-2xl mr-2 cursor-pointer text-red-700"
+                            onClick={() => deleteClick(user.id)}
+                          />
+                          <FaEdit
+                            className="text-2xl mr-2 cursor-pointer text-yellow-500 ml-1"
+                            // onClick={() => showEdit(category)}
+                          />
+                        </td>
                       </tr>
                     ))}
                 </tbody>
@@ -96,7 +107,7 @@ const UserManage = () => {
                 onPageChange={(e) => handlePageClick(e)}
                 pageRangeDisplayed={3}
                 marginPagesDisplayed={2}
-                pageCount={totalPage}
+                pageCount={totalPages}
                 previousLabel="< "
                 pageClassName="page-item"
                 pageLinkClassName="page-link"

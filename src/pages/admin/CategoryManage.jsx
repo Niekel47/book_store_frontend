@@ -5,9 +5,15 @@ import Nav from "../../components/admin/Nav";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import { UrlImage } from "../../../url";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
+import {
+  getAllCategory,
+  handleDeleteCategory,
+} from "../../redux/slice/admin/productSlice";
+import ModalAddCategory from "../../components/admin/ModalAddCategory";
+import { toast } from "react-toastify";
 
 const CategoryManage = () => {
   const navigate = useNavigate();
@@ -18,37 +24,56 @@ const CategoryManage = () => {
   const [totalPage, setTotalPage] = useState(0);
   const [categories, setCategories] = useState([]);
   const [showModalAdd, setShowModalAdd] = useState(false);
+  const listCategory = useSelector((state) => state.admin.product.listCategory);
+  const deleteCategory = useSelector(
+    (state) => state.admin.product.deleteCategory
+  );
+  const createCategory = useSelector(
+    (state) => state.admin.product.createCategory
+  );
+
+  const totalPagesCat = useSelector(
+    (state) => state.admin.product.totalPagesCat
+  );
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/api/category")
-      .then((response) => {
-        console.log("data", response.data);
-        setCategories(response.data.getallcat);
-        setTotalPage(response.data.totalPages);
-      })
-      .catch((error) => {
-        console.error("There was an error!", error);
-      });
-  }, []);
+    dispatch(getAllCategory(page));
+    setTotalPage(totalPagesCat);
+  }, [page, createCategory, deleteCategory]);
 
   const handlePageClick = (e) => {
-    setPage(e.selected + 1);
+    const currentPage = e.selected + 1;
+    setPage(currentPage);
+    dispatch(getAllCategory(currentPage));
+  };
+
+  const displayAdd = () => {
+    setShowModalAdd(true);
+  };
+
+  const handleClose = () => {
+    setShowModalAdd(false);
+  };
+
+  const deleteClick = async (category_id) => {
+    dispatch(handleDeleteCategory(category_id)).then((res) => {
+      toast.success("Xoa thanh cong");
+    });
   };
 
   return (
     <>
-      <div
-        style={{ backgroundColor: "#f0f0f0" }}
-        className="container-fluid bg min-vh-100 "
-      >
+      <div className="container-fluid bg min-vh-100 bg-gray-300 ">
         <div className="row ">
           <div className="col-4 col-md-2 bg-white vh-100 position-fixed">
             <Sidebar />
           </div>
 
           {<div className="col-4 col-md-2"></div>}
-
+          <ModalAddCategory
+            showModalAdd={showModalAdd}
+            handleClose={handleClose}
+          />
           <div className="col">
             <div className="px-3">
               <Nav />
@@ -57,7 +82,7 @@ const CategoryManage = () => {
                 <button
                   onClick={() => displayAdd()}
                   type="button"
-                  className="btn btn-primary"
+                  className="btn btn-primary bg-blue-800"
                 >
                   Thêm danh mục
                 </button>
@@ -72,34 +97,28 @@ const CategoryManage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {Array.isArray(categories) &&
-                    categories.map((category, index) => (
-                      <tr key={category.id}>
-                        <td>{index + 1}</td>
-                        <td>{category.id}</td>
-                        <td>{category.name}</td>
-                        <td>
-                          <MdDelete
-                            style={{
-                              fontSize: "25px",
-                              marginRight: "10px",
-                              cursor: "pointer",
-                              color: "#dc0000",
-                            }}
-                            onClick={() => deleteClick(item.id)}
-                          />
-                          <FaEdit
-                            style={{
-                              fontSize: "23px",
-                              marginRight: "10px",
-                              cursor: "pointer",
-                              color: "#e3c01c",
-                            }}
-                            onClick={() => showEdit(item)}
-                          />
-                        </td>
-                      </tr>
-                    ))}
+                  {listCategory &&
+                    listCategory.length > 0 &&
+                    listCategory.map((item, index) => {
+                      const displayIndex = (page - 1) * 5 + index + 1;
+                      return (
+                        <tr key={index}>
+                          <th scope="row">{displayIndex}</th>
+                          <td>{item.id}</td>
+                          <td style={{ width: "400px" }}>{item.name}</td>
+                          <td>
+                            <MdDelete
+                              className="text-2xl mr-2 cursor-pointer text-red-700"
+                              onClick={() => deleteClick(item.id)}
+                            />
+                            <FaEdit
+                              className="text-2xl mr-2 cursor-pointer text-yellow-500 ml-1"
+                              onClick={() => showEdit(item)}
+                            />
+                          </td>
+                        </tr>
+                      );
+                    })}
                 </tbody>
               </table>
               <ReactPaginate
@@ -107,7 +126,7 @@ const CategoryManage = () => {
                 onPageChange={(e) => handlePageClick(e)}
                 pageRangeDisplayed={3}
                 marginPagesDisplayed={2}
-                pageCount={totalPage}
+                pageCount={totalPagesCat}
                 previousLabel="< "
                 pageClassName="page-item"
                 pageLinkClassName="page-link"

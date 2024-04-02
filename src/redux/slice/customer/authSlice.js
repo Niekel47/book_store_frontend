@@ -55,7 +55,6 @@ export const profile = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       let token = localStorage.getItem("jwt");
-      console.log("jwt", localStorage.getItem("jwt"));
       if (!token) {
         token = "";
       }
@@ -75,7 +74,7 @@ export const profile = createAsyncThunk(
 
 export const logout = createAsyncThunk("auth/logout", async () => {
   try {
-    const res = await axios.get(URL_API + `/logout`, {
+    const res = await axios.get(URL_API + `auth/logout`, {
       withCredentials: true,
     });
     return res.data;
@@ -114,6 +113,7 @@ export const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.isSuccessLogin = action.payload;
+        console.log("action.payload", action.payload);
         state.isLoadingLogin = false;
         state.isErrorLogin = null;
       })
@@ -139,6 +139,13 @@ export const authSlice = createSlice({
         state.isLoadingProfile = false;
         state.isSuccessProfile = null;
       })
+
+      .addCase(logout.fulfilled, (state, action) => {
+        state.isSuccessLogout = action.payload;
+        state.isAuthSucess = null;
+        state.isSuccessLogin = null;
+        state.dataUser = null;
+      });
   },
 });
 

@@ -5,10 +5,7 @@ import Sidebar from "./SideBar";
 
 const Admin = () => {
   return (
-    <div
-      style={{ backgroundColor: "#f0f0f0" }}
-      className="container-fluid bg min-vh-100  "
-    >
+    <div className="container-fluid bg min-vh-100 bg-gray-300  ">
       <div className="row ">
         <div className="col-4 col-md-2 bg-white vh-100 ">
           <Sidebar />

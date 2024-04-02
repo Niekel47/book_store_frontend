@@ -5,11 +5,13 @@ import { FaStar } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductHome } from "../../redux/slice/customer/productSlice";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const URL_Image = UrlImage();
 const URL_API = UrlApi();
 
 const ProductList = () => {
+  const navigate = useNavigate()
   const listProducts = useSelector(
     (state) => state.customer.product.listProduct
   );
@@ -18,6 +20,10 @@ const ProductList = () => {
   useEffect(() => {
     dispatch(fetchProductHome());
   }, []);
+
+  const Detail = () => {
+    navigate("/detail")
+  }
 
   return (
     <>
@@ -64,7 +70,7 @@ const ProductList = () => {
               ))}
             </div>
             <div className="flex justify-center">
-              <button className="text-center mt-10 cursor-pointer  bg-primary text-white py-1 px-5 rounded-md">
+              <button className="text-center mt-10 cursor-pointer  bg-primary text-white py-1 px-5 rounded-md" onClick={Detail}>
                 View All Books
               </button>
             </div>
