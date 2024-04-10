@@ -118,10 +118,7 @@ const ModalEditProduct = (props) => {
           handleUpdateProduct({ product_id: productEdit.id, formData })
         ).then((res) => {
           console.log("res.payload", res);
-
-          if (res.payload && res.payload.success === true) {
-            toast.success(`${res.payload.message}`);
-          }
+          toast.success("Sửa thành công");
         });
       } catch (error) {
         console.error(error);

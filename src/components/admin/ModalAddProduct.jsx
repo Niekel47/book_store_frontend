@@ -19,9 +19,9 @@ const ModalAddProduct = (props) => {
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
   const [description, setDescription] = useState("");
-  const [CategoryIds, setCategoryIds] = useState(""); // Thay đổi khởi tạo là ""
-  const [PublisherId, setPublisherId] = useState(""); // Thay đổi khởi tạo là ""
-  const [AuthorId, setAuthorId] = useState(""); // Khởi tạo là null
+  const [CategoryIds, setCategoryIds] = useState(""); 
+  const [PublisherId, setPublisherId] = useState(""); 
+  const [AuthorId, setAuthorId] = useState(""); 
   const { listCategory, listPublisher, listAuthor } = useSelector(
     (state) => state.admin.product
   );

@@ -32,9 +32,9 @@ export const fetchProductHome = createAsyncThunk(
 
 export const fetchAllProduct = createAsyncThunk(
   "product/fetchAllProduct",
-  async () => {
+  async (params) => {
     try {
-      const res = await axios.get(URL_API + `product`);
+      const res = await axios.get(URL_API + `product`, { params });
       return res.data.products;
     } catch (error) {
       console.log(error);
@@ -54,14 +54,17 @@ export const fetchAllCategory = createAsyncThunk(
   }
 );
 
-export const fetchAllAuthor = createAsyncThunk("product/fetchAllAuthor", async () => {
-  try {
-    const res = await axios.get(URL_API + `author`);
-    return res.data.getallAuthor;
-  } catch (error) {
-    console.log(error);
+export const fetchAllAuthor = createAsyncThunk(
+  "product/fetchAllAuthor",
+  async () => {
+    try {
+      const res = await axios.get(URL_API + `author`);
+      return res.data.getallAuthor;
+    } catch (error) {
+      console.log(error);
+    }
   }
-});
+);
 
 export const fetchAllPublisher = createAsyncThunk(
   "product/fetchAllPublisher",
@@ -75,15 +78,11 @@ export const fetchAllPublisher = createAsyncThunk(
   }
 );
 
-
-
-
-
 export const getProductDetail = createAsyncThunk(
   "product/getProductDetail",
   async (product_id) => {
     try {
-      const res = await axios.get(URL_API + `/products/detail/${product_id}`);
+      const res = await axios.get(URL_API + `product/${product_id}`);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -196,10 +195,7 @@ export const productSlice = createSlice({
         state.isError = false;
       })
       .addCase(getProductDetail.fulfilled, (state, action) => {
-        state.productDetail = action.payload.product;
-        state.rate = action.payload.rate;
-        state.countRate = action.payload.countRate;
-        state.countStar = action.payload.countStar;
+        state.productDetail = action.payload.data;
         state.isLoading = false;
         state.isError = false;
       })

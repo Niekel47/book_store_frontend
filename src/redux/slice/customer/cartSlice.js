@@ -13,6 +13,10 @@ export const cartSlice = createSlice({
   name: "customer/cart",
   initialState,
   reducers: {
+    updateCartQuantity: (state, action) => {
+      state.cartTotalQuantity = action.payload;
+      console.log("action.payload", action.payload);
+    },
     addTocart(state, action) {
       const itemIdex = state.cartItem.findIndex(
         (item) => item.id === action.payload.id
@@ -98,6 +102,7 @@ export const {
   getTotal,
   clearCart,
   addTocartDetail,
+  updateCartQuantity,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

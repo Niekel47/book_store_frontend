@@ -6,14 +6,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProductHome } from "../../redux/slice/customer/productSlice";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const URL_Image = UrlImage();
 const URL_API = UrlApi();
 
 const ProductList = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const listProducts = useSelector(
     (state) => state.customer.product.listProduct
+  );
+  const userProfile = useSelector(
+    (state) => state.customer.auth.isSuccessProfile
   );
   const dispatch = useDispatch();
 
@@ -22,8 +26,15 @@ const ProductList = () => {
   }, []);
 
   const Detail = () => {
-    navigate("/detail")
-  }
+    if (userProfile) {
+      navigate("/product");
+    } else {
+      toast.error("Bạn cần đăng nhập");
+      navigate("/login");
+    }
+  };
+
+  
 
   return (
     <>
@@ -43,11 +54,11 @@ const ProductList = () => {
               {/* Card */}
               {listProducts.map((item, index) => (
                 <div key={item.id} className="div space-y-3 ">
-                  <Link>
+                  <Link to={`/product/${item.id}`}>
                     <img
                       src={URL_Image + item.image}
                       alt=""
-                      className="h-[220px] w-[150px] object-cover rounded-md "
+                      className="h-[220px] w-[220px] object-cover rounded-md "
                     />
                   </Link>
                   <p className="flex justify-center items-center gap-1">
@@ -70,7 +81,10 @@ const ProductList = () => {
               ))}
             </div>
             <div className="flex justify-center">
-              <button className="text-center mt-10 cursor-pointer  bg-primary text-white py-1 px-5 rounded-md" onClick={Detail}>
+              <button
+                className="text-center mt-10 cursor-pointer  bg-primary text-white py-1 px-5 rounded-md"
+                onClick={Detail}
+              >
                 View All Books
               </button>
             </div>

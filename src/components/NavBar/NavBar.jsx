@@ -7,6 +7,11 @@ import { useDispatch, useSelector } from "react-redux";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { IoBagHandle } from "react-icons/io5";
+import {
+  getTotal,
+  updateCartQuantity,
+} from "../../redux/slice/customer/cartSlice";
 
 const Menu = [
   {
@@ -16,24 +21,11 @@ const Menu = [
   },
   {
     id: 2,
-    name: "Best Seller",
-    link: "/#",
+    name: "All Books",
+    link: "/product",
   },
 ];
-const DropdownLinks = [
-  {
-    name: "Trending Books",
-    link: "/#",
-  },
-  {
-    name: "Best Selling",
-    link: "/#",
-  },
-  {
-    name: "Authors",
-    link: "/#",
-  },
-];
+
 const Navbar = ({ handleOrderPopup }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -49,18 +41,31 @@ const Navbar = ({ handleOrderPopup }) => {
   const userProfile = useSelector(
     (state) => state.customer.auth.isSuccessProfile
   );
+  const cart = useSelector((state) => state.customer.cart.cartItem);
+  const { cartTotalQuantity } = useSelector((state) => state.customer.cart);
   const logoutClick = () => {
     dispatch(logout());
     localStorage.removeItem("jwt");
     toast.success("Đăng xuất thành công");
-    navigate("/");
+    // navigate("/");
+    window.location.reload();
   };
+  const navigateToCart = () => {
+    if (userProfile) {
+      navigate("/cart");
+    } else {
+      toast.error("Bạn cần đăng nhập!");
+    }
+  };
+  console.log("cartTotalQuantity", cartTotalQuantity);
   useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (token) {
       dispatch(profile());
+      // dispatch(updateCartQuantity(cartTotalQuantity));
     }
-  }, [isSuccessLogin, isSuccessLogout]);
+    dispatch(getTotal());
+  }, [isSuccessLogin, cartTotalQuantity, cart]);
 
   return (
     <>
@@ -68,7 +73,7 @@ const Navbar = ({ handleOrderPopup }) => {
         <div className="container py-3 sm:py-0">
           <div className="flex justify-between items-center">
             <div>
-              <a href="#" className="font-bold text-2xl sm:text-3xl flex gap-2">
+              <a href="/" className="font-bold text-2xl sm:text-3xl flex gap-2">
                 <img src={Logo} alt="Logo" className="w-10" />
                 Books
               </a>
@@ -87,7 +92,7 @@ const Navbar = ({ handleOrderPopup }) => {
                 ))}
                 {/* Simple Dropdown and Links */}
                 <li className="group relative cursor-pointer">
-                  <a
+                  {/* <a
                     href="/#home"
                     className="flex h-[72px] items-center gap-[2px]"
                   >
@@ -95,8 +100,8 @@ const Navbar = ({ handleOrderPopup }) => {
                     <span>
                       <FaCaretDown className="transition-all duration-200 group-hover:rotate-180" />
                     </span>
-                  </a>
-                  <div className="absolute -left-9 z-[9999] hidden w-[150px] rounded-md bg-white p-2 text-black group-hover:block  ">
+                  </a> */}
+                  {/* <div className="absolute -left-9 z-[9999] hidden w-[150px] rounded-md bg-white p-2 text-black group-hover:block  ">
                     <ul className="space-y-3">
                       {DropdownLinks.map((data) => (
                         <li key={data.name}>
@@ -109,16 +114,25 @@ const Navbar = ({ handleOrderPopup }) => {
                         </li>
                       ))}
                     </ul>
-                  </div>
+                  </div> */}
                 </li>
               </ul>
-              <button
+              {/* <button
                 onClick={() => handleOrderPopup()}
                 className="bg-gradient-to-r from-primary to-secondary hover:scale-105 duration-200 text-white py-1 px-4 rounded-full flex items-center gap-3"
               >
                 Order
                 <FaCartShopping className="text-xl text-white drop-shadow-sm cursor-pointer" />
-              </button>
+              </button> */}
+              <div className="relative inline-block">
+                <IoBagHandle
+                  onClick={navigateToCart}
+                  className="text-blue-800 text-3xl"
+                />
+                <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-block w-5 h-5 rounded-full bg-blue-800 text-center leading-5 text-white">
+                  {cartTotalQuantity}
+                </span>
+              </div>
             </div>
           </div>
           {userProfile && userProfile.fullname ? (
@@ -129,6 +143,11 @@ const Navbar = ({ handleOrderPopup }) => {
                 </NavDropdown.Item>
                 <NavDropdown.Item onClick={() => logoutClick()}>
                   Đăng Xuất
+                </NavDropdown.Item>
+                <NavDropdown.Item
+                  onClick={() => navigatePage(`/order_wait/${userProfile.id}`)}
+                >
+                  Đơn Hàng
                 </NavDropdown.Item>
               </NavDropdown>
             </>

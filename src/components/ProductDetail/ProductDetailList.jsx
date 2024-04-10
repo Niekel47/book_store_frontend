@@ -23,19 +23,26 @@ const ProductDetailList = () => {
   const listPublisher = useSelector(
     (state) => state.customer.product.listPublisher
   );
+
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchAllProduct());
-    dispatch(fetchAllPublisher());
-    dispatch(fetchAllCategory());
-    dispatch(fetchAllAuthor());
-  }, []);
-
-  // State for selected filters
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedAuthors, setSelectedAuthors] = useState([]);
   const [selectedPublishers, setSelectedPublishers] = useState([]);
+  const [sortOrder, setSortOrder] = useState("asc");
+  useEffect(() => {
+    dispatch(
+      fetchAllProduct({
+        categoryIds: selectedCategories.join(","),
+        authorIds: selectedAuthors.join(","),
+        publisherIds: selectedPublishers.join(","),
+        sort: `price:${sortOrder}`,
+      })
+    );
+    dispatch(fetchAllPublisher());
+    dispatch(fetchAllCategory());
+    dispatch(fetchAllAuthor());
+    // dispatch(getProductDetail());
+  }, [selectedCategories, selectedAuthors, selectedPublishers, sortOrder]);
 
   // Function to handle filter changes
   const handleFilterChange = (filterType, filterId) => {
@@ -46,6 +53,7 @@ const ProductDetailList = () => {
             ? selectedCategories.filter((id) => id !== filterId)
             : [...selectedCategories, filterId]
         );
+
         break;
       case "author":
         setSelectedAuthors(
@@ -53,6 +61,7 @@ const ProductDetailList = () => {
             ? selectedAuthors.filter((id) => id !== filterId)
             : [...selectedAuthors, filterId]
         );
+
         break;
       case "publisher":
         setSelectedPublishers(
@@ -60,12 +69,15 @@ const ProductDetailList = () => {
             ? selectedPublishers.filter((id) => id !== filterId)
             : [...selectedPublishers, filterId]
         );
+
         break;
       default:
         break;
     }
   };
-
+  console.log("Selected categories: ", selectedCategories);
+  console.log("Selected authors: ", selectedAuthors);
+  console.log("Selected publishers: ", selectedPublishers);
   return (
     <>
       <div className="mt-4 mb-12">
@@ -82,11 +94,24 @@ const ProductDetailList = () => {
           <div className="">
             {/* Filters */}
             <div className="flex justify-between mb-5">
-              <div className="mr-7 ">
-                <h2 className="text-xl font-semibold mb-2">Filters:</h2>
+              <div className="">
+                <h2 className="text-lg font-semibold mb-2">Filters:</h2>
+                <div className="mb-3">
+                  <label htmlFor="sortOrder" className="mr-2">
+                    Sort by price:
+                  </label>
+                  <select
+                    id="sortOrder"
+                    value={sortOrder}
+                    onChange={(e) => setSortOrder(e.target.value)}
+                  >
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                  </select>
+                </div>
                 <ul>
                   <li>
-                    <h3 className="font-semibold">Categories:</h3>
+                    <h3 className="font-semibold">Danh Mục:</h3>
                     <ul>
                       {listCategory.map((category) => (
                         <li key={category.id}>
@@ -106,7 +131,7 @@ const ProductDetailList = () => {
                     </ul>
                   </li>
                   <li>
-                    <h3 className="font-semibold">Authors:</h3>
+                    <h3 className="font-semibold">Tác Giả:</h3>
                     <ul>
                       {listAuthor.map((author) => (
                         <li key={author.id}>
@@ -126,7 +151,7 @@ const ProductDetailList = () => {
                     </ul>
                   </li>
                   <li>
-                    <h3 className="font-semibold">Publishers:</h3>
+                    <h3 className="font-semibold">Nhà Xuất Bản:</h3>
                     <ul>
                       {listPublisher.map((publisher) => (
                         <li key={publisher.id}>
@@ -148,27 +173,17 @@ const ProductDetailList = () => {
                 </ul>
               </div>
               {/* Products */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-center gap-5 ">
+              <div className="w-3/4 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-center gap-5 ">
                 {/* Card */}
                 {listProducts.map((item, index) => (
                   <div key={item.id} className="div space-y-3 ">
-                    <div className="relative group">
-                      <Link>
-                        <img
-                          src={URL_Image + item.image}
-                          alt=""
-                          className="h-[220px] w-[150px] object-cover rounded-md "
-                        />
-                      </Link>
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button className="p-2 bg-blue-500 text-white rounded mr-2 cursor-pointer">
-                          Mua ngay
-                        </button>
-                        <button className="p-2 bg-green-500 text-white rounded cursor-pointer">
-                          Xem chi tiết
-                        </button>
-                      </div>
-                    </div>
+                    <Link to={`/product/${item.id}`}>
+                      <img
+                        src={URL_Image + item.image}
+                        alt=""
+                        className="h-[200px] w-[150px] object-cover rounded-md  "
+                      />
+                    </Link>
 
                     <p className="flex justify-center items-center gap-1">
                       {item.name}
