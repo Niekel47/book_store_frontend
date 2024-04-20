@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Nav from "../../components/admin/Nav";
-import Sidebar from "../../components/admin/SideBar";
+
 import axios from "axios"; // Import axios
 import ReactPaginate from "react-paginate";
 import { MdDelete } from "react-icons/md";
@@ -15,6 +15,7 @@ import {
   getAllProduct,
 } from "../../redux/slice/admin/productSlice";
 import { useDispatch, useSelector } from "react-redux";
+import SideBar from "../../components/admin/Sidebar";
 
 const ProductManage = () => {
   const navigate = useNavigate();
@@ -77,7 +78,7 @@ const ProductManage = () => {
         <div className="row ">
           {toggle && (
             <div className="col-4 col-md-2 bg-white vh-100 position-fixed">
-              <Sidebar />
+              <SideBar/>
             </div>
           )}
           {toggle && <div className="col-4 col-md-2"></div>}
@@ -126,7 +127,7 @@ const ProductManage = () => {
                           <td style={{ width: "150px" }}>
                             <img
                               width={"100px"}
-                              src={URL_IMAGE + item.image}
+                              src={ item.image}
                               alt=""
                             />
                           </td>

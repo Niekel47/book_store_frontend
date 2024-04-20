@@ -70,7 +70,7 @@ const CartItem = () => {
                       <tr key={`cart-${index}`}>
                         <td>
                           <img
-                            src={URL_IMAGE + item.image}
+                            src={item.image}
                             className="w-20"
                             alt=""
                           />

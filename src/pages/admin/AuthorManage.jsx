@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Sidebar from "../../components/admin/SideBar";
+import SideBar from "../../components/admin/Sidebar";
 import Nav from "../../components/admin/Nav";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
@@ -64,7 +64,7 @@ const AuthorManage = () => {
       <div className="container-fluid bg min-vh-100 bg-gray-300 ">
         <div className="row ">
           <div className="col-4 col-md-2 bg-white vh-100 position-fixed">
-            <Sidebar />
+            <SideBar />
           </div>
 
           {<div className="col-4 col-md-2"></div>}

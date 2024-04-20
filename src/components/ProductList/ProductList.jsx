@@ -34,8 +34,6 @@ const ProductList = () => {
     }
   };
 
-  
-
   return (
     <>
       <div className="mt-4 mb-12">
@@ -56,7 +54,7 @@ const ProductList = () => {
                 <div key={item.id} className="div space-y-3 ">
                   <Link to={`/product/${item.id}`}>
                     <img
-                      src={URL_Image + item.image}
+                      src={item.image}
                       alt=""
                       className="h-[220px] w-[220px] object-cover rounded-md "
                     />

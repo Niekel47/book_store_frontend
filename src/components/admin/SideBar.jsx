@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 // import { logout } from "../../redux/silce/admin/authSlice";
 import { toast } from "react-toastify";
 import { logoutAdmin, profileAdmin } from "../../redux/slice/admin/authSlice";
-const Sidebar = () => {
+const SideBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const adminProfile = useSelector(
@@ -32,9 +32,10 @@ const Sidebar = () => {
     });
     localStorage.removeItem("jwt_admin");
     navigate("/admin");
+    window.location.reload();
   };
   return (
-    <div className="bg-white sidebar p-2">
+    <div className="bg-white SideBar p-2">
       {adminProfile && adminProfile.fullname ? (
         <>
           <NavDropdown title="Tài Khoản" id="collapsible-nav-dropdown">
@@ -54,20 +55,22 @@ const Sidebar = () => {
         </>
       )}
       <hr className="text-dark" />
-      <div className="m-2">
+      <div className="" onClick={() => navigate("/admin")}>
         <img src="" alt="" />
-        <p>Admin</p>
+        <a className="" onClick={() => navigate("/admin")}>
+          Admin
+        </a>
       </div>
       <div>
-        <div
+        {/* <div
           onClick={() => navigate("/admin")}
           className="list-group-item py-2 cursor-pointer"
         >
           <RiDashboard3Fill className="text-3xl text-blue-500 mr-1" />
           <span>Dashboard</span>
-        </div>
+        </div> */}
         <div
-          onClick={() => navigate("/admin/orders")}
+          onClick={() => navigate("/admin/order")}
           className="list-group-item py-2 cursor-pointer"
         >
           <BsFillCartFill className="text-3xl text-blue-500 mr-1" />
@@ -125,4 +128,4 @@ const Sidebar = () => {
     </div>
   );
 };
-export default Sidebar;
+export default SideBar;

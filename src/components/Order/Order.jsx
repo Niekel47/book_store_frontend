@@ -5,10 +5,24 @@ import { addOrder } from "../../redux/slice/customer/orderSlice";
 import { clearCart } from "../../redux/slice/customer/cartSlice";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import {
+  fetchDistricts,
+  fetchProvinces,
+  fetchWards,
+} from "../../redux/slice/customer/productSlice";
+import { loadStripe } from "@stripe/stripe-js";
 
 const Order = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  // const [province, setProvinces] = useState([]);
+  // const [district, setDistricts] = useState([]);
+  // const [ward, setWards] = useState([]);
+  const [province_id, setProvinceId] = useState("");
+  const [district_id, setDistrictId] = useState([]);
+  const [selectedDistrictId, setSelectedDistrictId] = useState("");
+  const [ward_id, setWardId] = useState([]);
+  const [selectedWardId, setSelectedWardId] = useState("");
   const cart = useSelector((state) => state.customer.cart.cartItem);
   const cartTotalAmount = useSelector(
     (state) => state.customer.cart.cartTotalAmount
@@ -16,20 +30,39 @@ const Order = () => {
   const userProfile = useSelector(
     (state) => state.customer.auth.isSuccessProfile
   );
-  //   const isAuth = useSelector((state) => state.customer.auth.isAuthSucess);
-  //   const dataUser = useSelector((state) => state.customer.auth.dataUser);
-  //   const { isLoadingOrder } = useSelector((state) => state.customer.order);
+  
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [payment, setPayment] = useState("");
+  const provinces = useSelector((state) => state.customer.product.provinces);
   useEffect(() => {
     if (userProfile) {
       setName(userProfile.fullname || "");
       setPhone(userProfile.phone || "");
     }
     dispatch(getTotal());
-  }, [userProfile, cart]);
+    dispatch(fetchProvinces());
+    if (province_id) {
+      dispatch(fetchDistricts(province_id)).then((response) => {
+        if (Array.isArray(response.payload)) {
+          setDistrictId(response.payload);
+        } else {
+          console.error("response.payload is not an array");
+        }
+      });
+    }
+    if (selectedDistrictId) {
+      dispatch(fetchWards(selectedDistrictId)).then((response) => {
+        if (Array.isArray(response.payload)) {
+          setWardId(response.payload);
+        } else {
+          console.error("response.payload is not an array");
+        }
+      });
+    }
+  }, [userProfile, cart, province_id, selectedDistrictId]);
+
   const isValidOrder = () => {
     if (!userProfile) {
       toast.error("Vui lòng đăng nhập để đặt hàng");
@@ -62,6 +95,13 @@ const Order = () => {
     }
     return true;
   };
+  const selectedProvince = provinces.find(
+    (province) => province.province_id === province_id
+  );
+  const selectedDistrict = district_id.find(
+    (district) => district.district_id === selectedDistrictId
+  );
+  const selectedWard = ward_id.find((ward) => ward.ward_id === selectedWardId);
   const orderClick = () => {
     let check = isValidOrder();
     if (check === true) {
@@ -70,7 +110,7 @@ const Order = () => {
         cart: cart,
         user: {
           name: name,
-          address: address,
+          address: `${address}, ${selectedWard.ward_name}, ${selectedDistrict.district_name}, ${selectedProvince.province_name}`,
           phone: phone,
           user_id: user_id,
           payment: payment,
@@ -83,13 +123,44 @@ const Order = () => {
           setPhone("");
           setAddress("");
           setPayment("");
+          setProvinceId("");
+          setSelectedDistrictId("")
+          setSelectedWardId("")
           toast.success(`${result.payload.message}`);
         }
       });
     }
   };
+  const Stripe = async() => {
+    const stripe = await loadStripe(
+      "pk_test_51P65guRqcbVXZc9kNNZYEf7PX8R8awgYBsrJ5WMUQr36tXYmCjRUwu4U0RYnhWULM9P4aXcQLHuFn3Ozo8kmXfqg00I0soTrZc"
+    );
+    const body = {
+      products:cart
+    }
+    const headers =  {
+      "Content-type": "application/json"
+    }
+    const response = await fetch(
+      "http://localhost:3001/api/stripe/create-checkout-session",
+      {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(body),
+      }
+    );
+    const session = await response.json();
+    console.log("session", session);
+     const result = stripe.redirectToCheckout({
+       sessionId: session.id,
+     });
+    if(result.error){
+      console.log(result.error);
+    }
+  }
+
   return (
-    <div style={{ marginTop: "100px" }} className="container-fluid">
+    <div style={{ marginTop: "50px" }} className="container-fluid">
       <h4>CHI TIẾT ĐẶT HÀNG</h4>
       <div className="row">
         <div className="col-6">
@@ -126,14 +197,65 @@ const Order = () => {
             <br />
             <div className="form-group">
               <label htmlFor="exampleInputPassword1">Địa chỉ nhận hàng</label>
-              <p style={{ color: "#cd3f34" }}>*</p>
               <input
-                style={{ height: "50px", borderColor: "gray" }}
+                style={{ height: "40px", borderColor: "gray" }}
                 type="text"
                 className="form-control"
                 value={address}
                 onChange={(event) => setAddress(event.target.value)}
               />
+              <div className="mb-2 mt-2">
+                <label className="form-label">Tỉnh/Thành Phố:</label>
+                <select
+                  value={province_id}
+                  onChange={(event) => setProvinceId(event.target.value)}
+                  className="form-select"
+                >
+                  {provinces.map((province) => (
+                    <option
+                      key={province.province_id}
+                      value={province.province_id}
+                    >
+                      {province.province_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">Quận/Huyện:</label>
+                <select
+                  value={selectedDistrictId}
+                  onChange={(event) =>
+                    setSelectedDistrictId(event.target.value)
+                  }
+                  className="form-select"
+                >
+                  {district_id &&
+                    district_id.map((district) => (
+                      <option
+                        key={district.district_id}
+                        value={district.district_id}
+                      >
+                        {district.district_name}
+                      </option>
+                    ))}
+                </select>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Phường/Xã:</label>
+                <select
+                  value={selectedWardId}
+                  onChange={(event) => setSelectedWardId(event.target.value)}
+                  className="form-select"
+                >
+                  {ward_id.map((ward) => (
+                    <option key={ward.ward_id} value={ward.ward_id}>
+                      {ward.ward_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           </form>
         </div>
@@ -141,12 +263,12 @@ const Order = () => {
           <div
             style={{
               margin: "auto",
-              width: "70%",
-              height: "350px",
+              width: "100%",
+              height: "425px",
               backgroundColor: "#f5f5f5",
             }}
           >
-            <div style={{ paddingLeft: "50px", paddingTop: "40px" }}>
+            <div style={{ paddingLeft: "55px", paddingTop: "50px" }}>
               <h5>THÀNH TIỀN</h5>
               <div style={{ marginTop: "20px" }} className="row">
                 <div className="col-6">
@@ -192,6 +314,22 @@ const Order = () => {
                     Thanh toán paypal
                   </label>
                 </div>
+                {/* <div style={{ marginTop: "20px" }} className="form-check">
+                  <input
+                    style={{ borderColor: "#883731" }}
+                    className="form-check-input"
+                    type="radio"
+                    name="flexRadioDefault"
+                    value={"stripe"}
+                    onChange={(event) => setPayment(event.target.value)}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexRadioDefault2"
+                  >
+                    Thanh toán Stripe
+                  </label>
+                </div> */}
               </div>
               <div style={{ marginTop: "20px" }}>
                 <button
@@ -208,6 +346,23 @@ const Order = () => {
                   onClick={() => orderClick()}
                 >
                   ĐẶT HÀNG
+                </button>
+              </div>
+              <div style={{ marginTop: "20px" }}>
+                <button
+                  style={{
+                    width: "80%",
+                    height: "45px",
+                    border: "none",
+                    borderRadius: "15px",
+                    margin: "auto",
+                    backgroundColor: "#ca1515",
+                    color: "white",
+                    fontWeight: "bold",
+                  }}
+                  onClick={() => Stripe()}
+                >
+                  ĐẶT HÀNG STRIPE
                 </button>
               </div>
             </div>

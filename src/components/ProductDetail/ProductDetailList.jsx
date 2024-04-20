@@ -179,9 +179,9 @@ const ProductDetailList = () => {
                   <div key={item.id} className="div space-y-3 ">
                     <Link to={`/product/${item.id}`}>
                       <img
-                        src={URL_Image + item.image}
+                        src={item.image}
                         alt=""
-                        className="h-[200px] w-[150px] object-cover rounded-md  "
+                        className="h-[220px] w-[220px] object-cover rounded-md"
                       />
                     </Link>
 

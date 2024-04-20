@@ -56,7 +56,7 @@ const DetailProduct = () => {
                 <MDBCarousel showControls>
                   <MDBCarouselItem itemId={1}>
                     <img
-                      src={URL_IMAGE + productDetails.image}
+                      src={productDetails.image}
                       width={"50px"}
                       className="d-block w-80"
                       alt="..."
@@ -64,7 +64,7 @@ const DetailProduct = () => {
                   </MDBCarouselItem>
                   <MDBCarouselItem itemId={2}>
                     <img
-                      src={URL_IMAGE + productDetails.image}
+                      src={productDetails.image}
                       width={"50px"}
                       className="d-block w-80"
                       alt="..."
@@ -72,7 +72,7 @@ const DetailProduct = () => {
                   </MDBCarouselItem>
                   <MDBCarouselItem itemId={3}>
                     <img
-                      src={URL_IMAGE + productDetails.image}
+                      src={productDetails.image}
                       width={"50px"}
                       className="d-block w-80"
                       alt="..."

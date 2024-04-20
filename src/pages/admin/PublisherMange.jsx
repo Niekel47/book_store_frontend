@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Sidebar from "../../components/admin/SideBar";
 import Nav from "../../components/admin/Nav";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +13,9 @@ import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { toast } from "react-toastify";
 import ModalAddPublisher from "../../components/admin/ModalAddPublisher";
+import SideBar from "../../components/admin/Sidebar";
+
+
 
 const PublisherManage = () => {
   const navigate = useNavigate();
@@ -63,7 +65,7 @@ const PublisherManage = () => {
       <div className="container-fluid bg min-vh-100 bg-gray-300 ">
         <div className="row ">
           <div className="col-4 col-md-2 bg-white vh-100 position-fixed">
-            <Sidebar />
+            <SideBar/>
           </div>
 
           {<div className="col-4 col-md-2"></div>}

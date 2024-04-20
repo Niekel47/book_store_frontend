@@ -57,7 +57,6 @@ const Navbar = ({ handleOrderPopup }) => {
       toast.error("Bạn cần đăng nhập!");
     }
   };
-  console.log("cartTotalQuantity", cartTotalQuantity);
   useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (token) {

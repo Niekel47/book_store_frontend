@@ -16,6 +16,9 @@ const initialState = {
   rate: [],
   countRate: 0,
   countStar: {},
+  provinces: [],
+  districts: [],
+  wards: [],
 };
 
 export const fetchProductHome = createAsyncThunk(
@@ -101,6 +104,34 @@ export const getProductSearch = createAsyncThunk(
     } catch (error) {
       console.log(error);
     }
+  }
+);
+
+export const fetchProvinces = createAsyncThunk(
+  "product/fetchProvinces",
+  async () => {
+    const response = await axios.get(URL_API + `province`);
+    return response.data.results;
+  }
+);
+
+export const fetchDistricts = createAsyncThunk(
+  "product/fetchDistricts",
+  async (province_id) => {
+    const response = await axios.get(
+      URL_API + `province/district/${province_id}`
+    );
+    return response.data.results;
+  }
+);
+
+export const fetchWards = createAsyncThunk(
+  "product/fetchWards",
+  async (district_id) => {
+    const response = await axios.get(
+      URL_API +`province/ward/${district_id}`
+    );
+    return response.data.results;
   }
 );
 
@@ -203,23 +234,51 @@ export const productSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
       })
-
-      .addCase(getProductSearch.pending, (state, action) => {
-        state.listProductSearch = [];
+      //Provinces
+      .addCase(fetchProvinces.pending, (state, action) => {
         state.isLoading = true;
         state.isError = false;
       })
-      .addCase(getProductSearch.fulfilled, (state, action) => {
-        state.listProductSearch = action.payload.products;
-        state.totalPage = action.payload.total_page;
+      .addCase(fetchProvinces.fulfilled, (state, action) => {
+        state.provinces = action.payload;
         state.isLoading = false;
         state.isError = false;
       })
-      .addCase(getProductSearch.rejected, (state, action) => {
-        state.listProductSearch = [];
+      .addCase(fetchProvinces.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+      })
+      //District
+      .addCase(fetchDistricts.pending, (state, action) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(fetchDistricts.fulfilled, (state, action) => {
+        state.districts = action.payload.data;
+        state.isLoading = false;
+        state.isError = false;
+      })
+      .addCase(fetchDistricts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+      })
+      //Ward
+      .addCase(fetchWards.pending, (state, action) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(fetchWards.fulfilled, (state, action) => {
+        state.wards = action.payload.data;
+        state.isLoading = false;
+        state.isError = false;
+      })
+      .addCase(fetchWards.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
       });
+
+
+
   },
 });
 

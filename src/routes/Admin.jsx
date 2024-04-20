@@ -7,6 +7,7 @@ import CategoryManage from "../pages/admin/CategoryManage";
 import PublisherManage from "../pages/admin/PublisherMange";
 import AuthorManage from "../pages/admin/AuthorManage";
 import Login from "../pages/admin/Login";
+import OrderManage from "../pages/admin/OrderManage";
 
 const AdminRoute = () => {
   return (
@@ -18,6 +19,7 @@ const AdminRoute = () => {
       <Route path="/category" element={<CategoryManage />} />
       <Route path="/publisher" element={<PublisherManage />} />
       <Route path="/author" element={<AuthorManage />} />
+      <Route path="/order" element={<OrderManage />} />
     </Routes>
   );
 };

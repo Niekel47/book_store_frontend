@@ -3,6 +3,6 @@ export const UrlApi = () => {
 };
 
 export const UrlImage = () => {
-  return "http://localhost:3001/";
+  return "http://localhost:3001/images/";
 };
 

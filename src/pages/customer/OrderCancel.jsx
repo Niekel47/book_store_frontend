@@ -15,7 +15,6 @@ const OrderCancel = () => {
   let { user_id } = useParams();
   const orders = useSelector((state) => state.customer.order.orderCancel);
   useEffect(() => {
-    
     dispatch(getOrderCancel(user_id));
   }, []);
   return (
@@ -65,7 +64,7 @@ const OrderCancel = () => {
                               <div>
                                 <img
                                   width={"120px"}
-                                  src={URL_IMAGE + item.Product.image}
+                                  src={item.Product.image}
                                   alt=""
                                 />
                               </div>
@@ -98,7 +97,7 @@ const OrderCancel = () => {
                                     fontWeight: "bold",
                                   }}
                                   onClick={() =>
-                                    navigate(`/detail/${item.ProductId}`)
+                                    navigate(`/product/${item.ProductId}`)
                                   }
                                 >
                                   Mua lại

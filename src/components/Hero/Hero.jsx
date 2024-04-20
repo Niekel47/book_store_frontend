@@ -9,13 +9,13 @@ const Hero = () => {
     <>
       <MDBCarousel showControls>
         <MDBCarouselItem itemId={1}>
-          <img src={banner1} className="d-block h-[400px] w-100" alt="..." />
+          <img src={banner1} className="d-block h-[500px] w-100" alt="..." />
         </MDBCarouselItem>
         <MDBCarouselItem itemId={2}>
-          <img src={banner2} className="d-block h-[400px] w-100" alt="..." />
+          <img src={banner2} className="d-block h-[500px] w-100" alt="..." />
         </MDBCarouselItem>
         <MDBCarouselItem itemId={3}>
-          <img src={banner3} className="d-block h-[400px] w-100" alt="..." />
+          <img src={banner3} className="d-block h-[500px] w-100" alt="..." />
         </MDBCarouselItem>
       </MDBCarousel>
     </>

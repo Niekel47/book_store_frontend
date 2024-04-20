@@ -1,14 +1,13 @@
 import React from "react";
 import Nav from "./Nav";
-import Sidebar from "./SideBar";
-
+import SideBar from "./Sidebar";
 
 const Admin = () => {
   return (
     <div className="container-fluid bg min-vh-100 bg-gray-300  ">
       <div className="row ">
         <div className="col-4 col-md-2 bg-white vh-100 ">
-          <Sidebar />
+          <SideBar />
         </div>
 
         <div className="col">

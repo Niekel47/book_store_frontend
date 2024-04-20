@@ -20,7 +20,7 @@ const OrderWait = () => {
   const userProfile = useSelector(
     (state) => state.customer.auth.isSuccessProfile
   );
-  const orders  = useSelector((state) => state.customer.order.orderWait);
+  const orders = useSelector((state) => state.customer.order.orderWait);
   console.log("orders", orders);
   const orderCancel = useSelector(
     (state) => state.customer.order.handleOrderCancel
@@ -79,7 +79,7 @@ const OrderWait = () => {
                               <div>
                                 <img
                                   width={"120px"}
-                                  src={URL_IMAGE + item.Product.image}
+                                  src={item.Product.image}
                                   alt=""
                                 />
                               </div>

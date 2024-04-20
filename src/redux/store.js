@@ -5,6 +5,7 @@ import productAdminReducer from "./slice/admin/productSlice";
 import authAdminReducer from "./slice/admin/authSlice";
 import cartReducer from "./slice/customer/cartSlice";
 import orderReducer from "./slice/customer/orderSlice";
+import orderAdminReducer from "./slice/admin/orderSlice";
 
 const rootReducer = combineReducers({
   customer: combineReducers({
@@ -12,12 +13,12 @@ const rootReducer = combineReducers({
     auth: authReducer,
 
     cart: cartReducer,
-     order: orderReducer,
+    order: orderReducer,
     //  category: categoryReducer,
     //  rate: rateReducer,
   }),
   admin: combineReducers({
-    //  order: orderAdminReducer,
+    order: orderAdminReducer,
     product: productAdminReducer,
     auth: authAdminReducer,
 

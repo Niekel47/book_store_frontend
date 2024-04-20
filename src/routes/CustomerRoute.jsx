@@ -11,12 +11,16 @@ import OrderStatus from "../components/OrderStatus/OrderStatus";
 import OrderShip from "../pages/customer/OrderShip";
 import OrderComplete from "../pages/customer/OrderComplete";
 import OrderCancel from "../pages/customer/OrderCancel";
+import Success from "../components/Success/Success";
+import Cancel from "../components/Cancel/Cancel";
 // import DetailPRODUCT from "../pages/customer/DetailPRODUCT";
 
 const CustomerRoute = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/success" element={<Success />} />
+      <Route path="/cancel" element={<Cancel />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/product" element={<ProductDetail />} />

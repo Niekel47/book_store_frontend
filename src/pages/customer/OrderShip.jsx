@@ -75,7 +75,7 @@ const OrderShip = () => {
                               <div>
                                 <img
                                   width={"120px"}
-                                  src={URL_IMAGE + item.Product.image}
+                                  src={item.Product.image}
                                   alt=""
                                 />
                               </div>
