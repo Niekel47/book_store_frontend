@@ -1,15 +1,17 @@
 import React from "react";
 import { profileAdmin } from "../../redux/slice/admin/authSlice";
+import "bootstrap/js/dist/dropdown";
+import "bootstrap/js/dist/collapse";
+import { BsLayoutTextSidebarReverse } from "react-icons/bs";
 
-
-const Nav = () => {
+const Nav = ({ Toggle }) => {
   return (
     <nav className="navbar navbar-expand-sm navbar-dark bg-transparent">
-      <i
-        style={{ color: "#e28585" }}
+      <BsLayoutTextSidebarReverse
+        style={{ color: "#e56565" }}
         className="navbar-brand bi bi-justify-left fs-4"
-        // onClick={Toggle}
-      ></i>
+        onClick={Toggle}
+      ></BsLayoutTextSidebarReverse>
       <button
         className="navbar-toggler d-lg-none"
         type="button"

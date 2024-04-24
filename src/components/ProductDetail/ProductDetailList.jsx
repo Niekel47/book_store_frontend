@@ -173,7 +173,7 @@ const ProductDetailList = () => {
                 </ul>
               </div>
               {/* Products */}
-              <div className="w-3/4 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-center gap-5 ">
+              <section className="w-3/4 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-center gap-5 section-name padding-y-sm ">
                 {/* Card */}
                 {listProducts.map((item, index) => (
                   <div key={item.id} className="div space-y-3 ">
@@ -203,7 +203,7 @@ const ProductDetailList = () => {
                     </div>
                   </div>
                 ))}
-              </div>
+              </section>
             </div>
           </div>
         </div>

@@ -19,7 +19,6 @@ import { toast } from "react-toastify";
 const AuthorManage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [toggle, setToggle] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [showModalAdd, setShowModalAdd] = useState(false);
@@ -29,6 +28,10 @@ const AuthorManage = () => {
   const totalPages = useSelector(
     (state) => state.admin.product.totalPagesAuthor
   );
+   const [toggle, setToggle] = useState(true);
+   const Toggle = () => {
+     setToggle(!toggle);
+   };
   console.log("totalPages", totalPages);
   // console.log("Pagecount", Pagecount);
 
@@ -63,10 +66,11 @@ const AuthorManage = () => {
     <>
       <div className="container-fluid bg min-vh-100 bg-gray-300 ">
         <div className="row ">
-          <div className="col-4 col-md-2 bg-white vh-100 position-fixed">
-            <SideBar />
-          </div>
-
+          {toggle && (
+            <div className="col-4 col-md-2 bg-white vh-100 position-fixed ">
+              <SideBar />
+            </div>
+          )}
           {<div className="col-4 col-md-2"></div>}
           <ModalAddAuthor
             showModalAdd={showModalAdd}
@@ -75,7 +79,7 @@ const AuthorManage = () => {
 
           <div className="col">
             <div className="px-3">
-              <Nav />
+              <Nav Toggle={Toggle} />
               <div className="flex justify-between">
                 <div className="text-gray-500 text-2xl">Quản lý tác giả</div>
                 <button

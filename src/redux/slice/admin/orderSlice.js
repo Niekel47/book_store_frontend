@@ -20,10 +20,12 @@ export const getOrderHome = createAsyncThunk(
   "order/orderDashBoard",
   async () => {
     try {
-      const res = await axios.get(URL_API + `/admin/dashboard`, {
+      const res = await axios.get(URL_API + `order/dashboard`, {
         withCredentials: true,
       });
+     
       const data = await res.data;
+       console.log("res", res.data);
       return data;
     } catch (error) {
       console.log(error);
@@ -94,6 +96,10 @@ export const handleDeleteOrder = createAsyncThunk(
     }
   }
 );
+
+
+
+
 
 export const orderSlice = createSlice({
   name: "admin/order",

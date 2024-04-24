@@ -63,7 +63,9 @@ const Navbar = ({ handleOrderPopup }) => {
       dispatch(profile());
       // dispatch(updateCartQuantity(cartTotalQuantity));
     }
-    dispatch(getTotal());
+    if (userProfile){
+      dispatch(getTotal());
+    } ;
   }, [isSuccessLogin, cartTotalQuantity, cart]);
 
   return (

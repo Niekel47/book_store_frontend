@@ -65,10 +65,11 @@ const CategoryManage = () => {
     <>
       <div className="container-fluid bg min-vh-100 bg-gray-300 ">
         <div className="row ">
-          <div className="col-4 col-md-2 bg-white vh-100 position-fixed">
-            <SideBar />
-          </div>
-
+          {toggle && (
+            <div className="col-4 col-md-2 bg-white vh-100 position-fixed ">
+              <SideBar />
+            </div>
+          )}
           {<div className="col-4 col-md-2"></div>}
           <ModalAddCategory
             showModalAdd={showModalAdd}

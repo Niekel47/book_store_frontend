@@ -36,7 +36,7 @@ const ProductList = () => {
 
   return (
     <>
-      <div className="mt-4 mb-12">
+      <section className="mt-4 mb-12">
         <div className="container">
           {/* header */}
           <div className="text-center mb-10 max-w-[600px] mx-auto">
@@ -48,10 +48,10 @@ const ProductList = () => {
 
           {/* Body section */}
           <div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-center gap-5 ">
+            <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-center gap-5 section-name padding-y-sm">
               {/* Card */}
               {listProducts.map((item, index) => (
-                <div key={item.id} className="div space-y-3 ">
+                <div key={item.id} className="row space-y-3 ">
                   <Link to={`/product/${item.id}`}>
                     <img
                       src={item.image}
@@ -88,7 +88,7 @@ const ProductList = () => {
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </>
   );
 };
