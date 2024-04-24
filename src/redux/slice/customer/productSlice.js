@@ -128,9 +128,7 @@ export const fetchDistricts = createAsyncThunk(
 export const fetchWards = createAsyncThunk(
   "product/fetchWards",
   async (district_id) => {
-    const response = await axios.get(
-      URL_API +`province/ward/${district_id}`
-    );
+    const response = await axios.get(URL_API + `province/ward/${district_id}`);
     return response.data.results;
   }
 );
@@ -275,10 +273,24 @@ export const productSlice = createSlice({
       .addCase(fetchWards.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
+      })
+
+      .addCase(getProductSearch.pending, (state, action) => {
+        state.listProductSearch = [];
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(getProductSearch.fulfilled, (state, action) => {
+        state.listProductSearch = action.payload.products;
+        state.totalPage = action.payload.total_page;
+        state.isLoading = false;
+        state.isError = false;
+      })
+      .addCase(getProductSearch.rejected, (state, action) => {
+        state.listProductSearch = [];
+        state.isLoading = false;
+        state.isError = true;
       });
-
-
-
   },
 });
 

@@ -76,7 +76,7 @@ const SideBar = () => {
           <BsFillCartFill className="text-3xl text-blue-500 mr-1" />
           <span>Quản Lý Đơn Hàng</span>
         </div>
-
+        <hr className="text-dark" />
         <div
           onClick={() => navigate("/admin/product")}
           className="list-group-item py-2 cursor-pointer"
@@ -84,7 +84,7 @@ const SideBar = () => {
           <FaBagShopping className="text-3xl text-blue-500 mr-1" />
           <span> Quản Lý Sản Phẩm</span>
         </div>
-
+        <hr className="text-dark" />
         <div
           className="list-group-item py-2 cursor-pointer "
           onClick={() => navigate("/admin/category")}
@@ -92,7 +92,7 @@ const SideBar = () => {
           <FaBagShopping className="text-3xl text-blue-500 mr-1" />
           <span>Quản lý danh mục</span>
         </div>
-
+        <hr className="text-dark" />
         <div
           className="list-group-item py-2 cursor-pointer"
           onClick={() => navigate("/admin/publisher")}
@@ -100,7 +100,7 @@ const SideBar = () => {
           <FaBagShopping className="text-3xl text-blue-500 mr-1" />
           <span>Quản lý nhà xuất bản</span>
         </div>
-
+        <hr className="text-dark" />
         <div
           className="list-group-item py-2 cursor-pointer"
           onClick={() => navigate("/admin/author")}
@@ -108,6 +108,7 @@ const SideBar = () => {
           <FaBagShopping className="text-3xl text-blue-500 mr-1" />
           <span>Quản lý tác giả</span>
         </div>
+        <hr className="text-dark" />
 
         <div
           className="list-group-item py-2 cursor-pointer"
@@ -116,7 +117,7 @@ const SideBar = () => {
           <FaBagShopping className="text-3xl text-blue-500 mr-1" />
           <span>Quản lý người dùng</span>
         </div>
-
+        <hr className="text-dark" />
         <div
           onClick={() => logoutClick()}
           className="list-group-item py-2 cursor-pointer"

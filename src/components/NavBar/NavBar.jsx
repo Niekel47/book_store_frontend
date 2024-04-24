@@ -12,6 +12,7 @@ import {
   getTotal,
   updateCartQuantity,
 } from "../../redux/slice/customer/cartSlice";
+import SearchInput from "../SearchInput/SearchInput";
 
 const Menu = [
   {
@@ -23,6 +24,11 @@ const Menu = [
     id: 2,
     name: "All Books",
     link: "/product",
+  },
+  {
+    id: 3,
+    name: "About",
+    link: "/about",
   },
 ];
 
@@ -166,6 +172,7 @@ const Navbar = ({ handleOrderPopup }) => {
           )}
         </div>
       </div>
+      <SearchInput />
     </>
   );
 };

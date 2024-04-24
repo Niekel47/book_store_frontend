@@ -13,6 +13,8 @@ import OrderComplete from "../pages/customer/OrderComplete";
 import OrderCancel from "../pages/customer/OrderCancel";
 import Success from "../components/Success/Success";
 import Cancel from "../components/Cancel/Cancel";
+import AboutPage from "../pages/customer/AboutPage";
+import Search from "../pages/customer/Search";
 // import DetailPRODUCT from "../pages/customer/DetailPRODUCT";
 
 const CustomerRoute = () => {
@@ -25,11 +27,13 @@ const CustomerRoute = () => {
       <Route path="/register" element={<Register />} />
       <Route path="/product" element={<ProductDetail />} />
       <Route path="/cart" element={<Cart />} />
+      <Route path="/about" element={<AboutPage />} />
       <Route path="/product/:product_id" element={<DetailPRODUCT />} />
       <Route path="/order_wait/:user_id" element={<OrderWait />} />
       <Route path="/order_ship/:user_id" element={<OrderShip />} />
       <Route path="/order_complete/:user_id" element={<OrderComplete />} />
       <Route path="/order_cancel/:user_id" element={<OrderCancel />} />
+      <Route path="/search" element={<Search/>} />
     </Routes>
   );
 };

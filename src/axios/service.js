@@ -7,9 +7,9 @@ const URL_API = UrlApi();
 //   return await axios.get(URL_API + `/categories/${category_id}?page=${page}`);
 // };
 
-// const getProductSearch = async (name, page) => {
-//   return await axios.get(URL_API + `/search?name=${name}&page=${page}`);
-// };
+const getProductSearch = async (name, page) => {
+  return await axios.get(URL_API + `product/search?name=${name}&page=${page}`);
+};
 
 // const getOrderAdmin = async (page) => {
 //   return await axios.get(URL_API + `/admin/dashboard?page=${page}`, {
@@ -29,4 +29,4 @@ const getOrder = async (page) => {
 //   });
 // };
 
-export { getOrder };
+export { getOrder, getProductSearch };

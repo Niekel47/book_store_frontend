@@ -46,7 +46,7 @@ const Admin = () => {
             <SideBar />
           </div>
         )}
-        {/* {toggle && <div className="col-1 "></div>} */}
+        
         <div className="col">
           <div className="px-3">
             <Nav Toggle={Toggle} />

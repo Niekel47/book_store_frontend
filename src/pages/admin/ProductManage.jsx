@@ -36,6 +36,7 @@ const ProductManage = () => {
   const updateProduct = useSelector(
     (state) => state.admin.product.updateProduct
   );
+  console.log("updateProduct", updateProduct);
   const listProducts = useSelector((state) => state.admin.product.listProduct);
   const Pagecount = useSelector((state) => state.admin.product.totalPages);
 
