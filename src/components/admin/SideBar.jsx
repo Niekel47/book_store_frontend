@@ -37,6 +37,15 @@ const SideBar = () => {
   };
   return (
     <div className="bg-white SideBar p-2">
+      <div className="" onClick={() => navigate("/admin")}>
+        <a
+          href="/admin"
+          className="font-bold text-2xl sm:text-3xl flex gap-2 py-3"
+        >
+          <img src={Logo} alt="Logo" className="w-10" />
+          Books
+        </a>
+      </div>
       {adminProfile && adminProfile.fullname ? (
         <>
           <NavDropdown title="Tài Khoản" id="collapsible-nav-dropdown">
@@ -56,20 +65,8 @@ const SideBar = () => {
         </>
       )}
       <hr className="text-dark" />
-      <div className="" onClick={() => navigate("/admin")}>
-        <img src={Logo} alt="" style={{width:"30px",height:"30px"}} />
-        <a className="" onClick={() => navigate("/admin")}>
-          Admin
-        </a>
-      </div>
       <div>
-        {/* <div
-          onClick={() => navigate("/admin")}
-          className="list-group-item py-2 cursor-pointer"
-        >
-          <RiDashboard3Fill className="text-3xl text-blue-500 mr-1" />
-          <span>Dashboard</span>
-        </div> */}
+        <hr className="text-dark" />
         <div
           onClick={() => navigate("/admin/order")}
           className="list-group-item py-2 cursor-pointer"

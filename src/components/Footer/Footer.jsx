@@ -11,7 +11,7 @@ import footerLogo from "../../assets/website/logo.png";
 const FooterLinks = [
   {
     title: "Home",
-    link: "/#",
+    link: "/",
   },
   {
     title: "About",

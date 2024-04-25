@@ -8,8 +8,7 @@ const Nav = ({ Toggle }) => {
   return (
     <nav className="navbar navbar-expand-sm navbar-dark bg-transparent">
       <BsLayoutTextSidebarReverse
-        style={{ color: "#e56565" }}
-        className="navbar-brand bi bi-justify-left fs-4"
+        className="navbar-brand bi bi-justify-left fs-4 text-blue-500"
         onClick={Toggle}
       ></BsLayoutTextSidebarReverse>
       <button
@@ -23,6 +22,7 @@ const Nav = ({ Toggle }) => {
       >
         <i className="bi bi-justify"></i>
       </button>
+      
     </nav>
   );
 };

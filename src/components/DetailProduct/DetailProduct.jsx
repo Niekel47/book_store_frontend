@@ -57,7 +57,7 @@ const DetailProduct = () => {
                   <MDBCarouselItem itemId={1}>
                     <img
                       src={productDetails.image}
-                      width={"50px"}
+                      width={"100px"}
                       className="d-block w-80"
                       alt="..."
                     />
@@ -65,7 +65,7 @@ const DetailProduct = () => {
                   <MDBCarouselItem itemId={2}>
                     <img
                       src={productDetails.image}
-                      width={"50px"}
+                      width={"100px"}
                       className="d-block w-80"
                       alt="..."
                     />
@@ -73,7 +73,7 @@ const DetailProduct = () => {
                   <MDBCarouselItem itemId={3}>
                     <img
                       src={productDetails.image}
-                      width={"50px"}
+                      width={"100px"}
                       className="d-block w-80"
                       alt="..."
                     />

@@ -165,7 +165,7 @@ export const productSlice = createSlice({
       })
       .addCase(fetchAllProduct.fulfilled, (state, action) => {
         state.listProduct = action.payload.data;
-        state.totalPagesProduct = action.payload.totalPages;
+        state.totalPagesProduct = action.payload.totalPagesProduct;
         console.log("action.payload", action.payload);
         state.isLoading = false;
         state.isError = false;

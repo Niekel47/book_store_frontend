@@ -30,6 +30,13 @@ const ProductDetailList = () => {
   const [selectedAuthors, setSelectedAuthors] = useState([]);
   const [selectedPublishers, setSelectedPublishers] = useState([]);
   const [sortOrder, setSortOrder] = useState("asc");
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(0);
+  const handlePageClick = (e) => {
+    const currentPage = e.selected + 1;
+    setPage(currentPage);
+    dispatch(fetchAllProduct(currentPage));
+  };
   useEffect(() => {
     dispatch(
       fetchAllProduct({
@@ -37,17 +44,26 @@ const ProductDetailList = () => {
         authorIds: selectedAuthors.join(","),
         publisherIds: selectedPublishers.join(","),
         sort: `price:${sortOrder}`,
-      })
+        page: page,
+        limit: 10,
+      }),
+      setTotalPage(Pagecount)
     );
     dispatch(fetchAllPublisher());
     dispatch(fetchAllCategory());
     dispatch(fetchAllAuthor());
     // dispatch(getProductDetail());
-  }, [selectedCategories, selectedAuthors, selectedPublishers, sortOrder]);
-   const Pagecount = useSelector(
-     (state) => state.customer.product
-   );
-   console.log("Pagecount", Pagecount);
+  }, [
+    page,
+    selectedCategories,
+    selectedAuthors,
+    selectedPublishers,
+    sortOrder,
+  ]);
+  const Pagecount = useSelector(
+    (state) => state.customer.product.totalPagesProduct
+  );
+  console.log("Pagecount", Pagecount);
 
   // Function to handle filter changes
   const handleFilterChange = (filterType, filterId) => {
@@ -96,7 +112,7 @@ const ProductDetailList = () => {
           <div className="">
             {/* Filters */}
             <div className="flex justify-between mb-5">
-              <div className="">
+              <div className="w-[15%] ">
                 <h2 className="text-lg font-semibold mb-2">Filters:</h2>
                 <div className="mb-3">
                   <label htmlFor="sortOrder" className="mr-2">
@@ -175,7 +191,7 @@ const ProductDetailList = () => {
                 </ul>
               </div>
               {/* Products */}
-              <section className="w-3/4 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-center gap-5 section-name padding-y-sm ">
+              <section className="w-[85%] grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-center gap-5 section-name padding-y-sm ">
                 {/* Card */}
                 {listProducts.map((item, index) => (
                   <div key={item.id} className="div space-y-3 ">
@@ -209,10 +225,10 @@ const ProductDetailList = () => {
             </div>
             <ReactPaginate
               nextLabel=" >"
-              // onPageChange={(e) => handlePageClick(e)}
+              onPageChange={(e) => handlePageClick(e)}
               pageRangeDisplayed={3}
               marginPagesDisplayed={2}
-              // pageCount={Pagecount}
+              pageCount={totalPage}
               previousLabel="< "
               pageClassName="page-item"
               pageLinkClassName="page-link"

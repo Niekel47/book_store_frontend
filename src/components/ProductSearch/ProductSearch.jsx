@@ -52,7 +52,11 @@ const ProductSearch = () => {
                 >
                   <div>
                     <Link to={`/product/${item.id}`}>
-                      <img width={"100%"} src={item.image} alt="" />
+                      <img
+                        className="h-[300px] w-[300px] object-cover rounded-md"
+                        src={item.image}
+                        alt=""
+                      />
                     </Link>
                   </div>
                   <div>
