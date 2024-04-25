@@ -116,15 +116,13 @@ const OrderManage = () => {
   };
   return (
     <>
-    
       <ModalOrder
         dataOrder={dataOrder}
         showModal={showModal}
         handleClose={handleClose}
       />
       <div
-        style={{ backgroundColor: "#f0f0f0" }}
-        className="container-fluid bg min-vh-100 "
+        className="container-fluid bg min-vh-100 bg-gray-300 "
       >
         <div className="row ">
           {toggle && (
@@ -189,7 +187,7 @@ const OrderManage = () => {
                               }}
                             />
                             <GiConfirmed
-                              onClick={() => confirmClick(item.id,item.status)}
+                              onClick={() => confirmClick(item.id, item.status)}
                               className="text-green-700 text-lg cursor-pointer ml-1"
                             >
                               Duyệt

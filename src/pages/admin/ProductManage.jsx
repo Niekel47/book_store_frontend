@@ -79,7 +79,7 @@ const ProductManage = () => {
         <div className="row ">
           {toggle && (
             <div className="col-4 col-md-2 bg-white vh-100 position-fixed">
-              <SideBar/>
+              <SideBar />
             </div>
           )}
           {toggle && <div className="col-4 col-md-2"></div>}
@@ -124,13 +124,8 @@ const ProductManage = () => {
                       return (
                         <tr key={index}>
                           <th scope="row">{displayIndex}</th>
-
                           <td style={{ width: "150px" }}>
-                            <img
-                              width={"100px"}
-                              src={ item.image}
-                              alt=""
-                            />
+                            <img width={"100px"} src={item.image} alt="" />
                           </td>
                           <td style={{ width: "400px" }}>{item.name}</td>
                           <td

@@ -12,8 +12,8 @@ import OrderManage from "../pages/admin/OrderManage";
 const AdminRoute = () => {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/" element={<Admin />} />
+      <Route path="/" element={<Login />} />
+      <Route path="/dashboard" element={<Admin />} />
       <Route path="/product" element={<ProductManage />} />
       <Route path="/user" element={<UserManage />} />
       <Route path="/category" element={<CategoryManage />} />

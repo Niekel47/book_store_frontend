@@ -112,7 +112,7 @@ const ProductDetailList = () => {
           <div className="">
             {/* Filters */}
             <div className="flex justify-between mb-5">
-              <div className="w-[15%] ">
+              <div className="w-[19%] ">
                 <h2 className="text-lg font-semibold mb-2">Filters:</h2>
                 <div className="mb-3">
                   <label htmlFor="sortOrder" className="mr-2">
@@ -191,7 +191,7 @@ const ProductDetailList = () => {
                 </ul>
               </div>
               {/* Products */}
-              <section className="w-[85%] grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-center gap-5 section-name padding-y-sm ">
+              <section className="w-[80%] grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-start gap-5 section-name padding-y-sm ">
                 {/* Card */}
                 {listProducts.map((item, index) => (
                   <div key={item.id} className="div space-y-3 ">
@@ -228,7 +228,7 @@ const ProductDetailList = () => {
               onPageChange={(e) => handlePageClick(e)}
               pageRangeDisplayed={3}
               marginPagesDisplayed={2}
-              pageCount={totalPage}
+              pageCount={Pagecount}
               previousLabel="< "
               pageClassName="page-item"
               pageLinkClassName="page-link"

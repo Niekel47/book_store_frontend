@@ -19,6 +19,7 @@ const DetailProduct = () => {
   const productDetails = useSelector(
     (state) => state.customer.product.productDetail
   );
+  console.log("productDetails", productDetails);
   const userProfile = useSelector(
     (state) => state.customer.auth.isSuccessProfile
   );
@@ -83,8 +84,34 @@ const DetailProduct = () => {
             </div>
             <div className="col-6">
               <div>
-                <p style={{ fontSize: "25px", fontWeight:"bold" }}>{productDetails.name}</p>
+                <p style={{ fontSize: "35px", fontWeight: "bold" }}>
+                  {productDetails.name}
+                </p>
               </div>
+              <div>
+                <p style={{ fontSize: "18px", fontWeight: "bold" }}>
+                  Tác giả:{productDetails.Author.name}
+                </p>
+              </div>
+              <div>
+                <p style={{ fontSize: "18px", fontWeight: "bold" }}>
+                  Nhà xuất bản:{productDetails.Publisher.name}
+                </p>
+              </div>
+              <div>
+                <p style={{ fontSize: "18px", fontWeight: "bold" }}>
+                  Danh mục:
+                  {productDetails.Categories &&
+                    productDetails.Categories.map((category, index) => (
+                      <span key={index}> {category.name}</span>
+                    ))}
+                </p>
+              </div>
+              {/* <div>
+                <p style={{ fontSize: "25px", fontWeight: "bold" }}>
+                  Nhà xuất bản:{productDetails.Categoires.name}
+                </p>
+              </div> */}
               <div>
                 <p
                   style={{

@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { logoutAdmin, profileAdmin } from "../../redux/slice/admin/authSlice";
 import Logo from "../../assets/website/logo.png";
+import { Nav } from "react-bootstrap";
 const SideBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -37,33 +38,27 @@ const SideBar = () => {
   };
   return (
     <div className="bg-white SideBar p-2">
-      <div className="" onClick={() => navigate("/admin")}>
-        <a
-          href="/admin"
-          className="font-bold text-2xl sm:text-3xl flex gap-2 py-3"
-        >
-          <img src={Logo} alt="Logo" className="w-10" />
-          Books
-        </a>
-      </div>
       {adminProfile && adminProfile.fullname ? (
         <>
-          <NavDropdown title="Tài Khoản" id="collapsible-nav-dropdown">
-            <NavDropdown.Item>Hello ! {adminProfile.fullname}</NavDropdown.Item>
-            <NavDropdown.Item onClick={() => logoutClick()}>
-              Đăng Xuất
-            </NavDropdown.Item>
-          </NavDropdown>
+          <div title="Tài Khoản" id="collapsible-nav-dropdown">
+            <div className="font-bold underline text-blue-500">Welcome!</div>
+            {adminProfile.fullname}
+          </div>
         </>
       ) : (
         <>
-          <NavDropdown title="Tài Khoản" id="collapsible-nav-dropdown">
-            <NavDropdown.Item onClick={() => navigate("/admin/login")}>
-              Đăng Nhập
-            </NavDropdown.Item>
-          </NavDropdown>
+          <div title="Tài Khoản" id="collapsible-nav-dropdown">
+            <div onClick={() => navigate("/admin/login")}>Hello</div>
+          </div>
         </>
       )}
+      <a
+        href="/admin/dashboard"
+        className="font-bold text-2xl sm:text-3xl flex gap-2 py-3"
+      >
+        <img src={Logo} alt="Logo" className="w-10" />
+        Books
+      </a>
       <hr className="text-dark" />
       <div>
         <hr className="text-dark" />

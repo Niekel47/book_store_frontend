@@ -49,7 +49,7 @@ const Login = () => {
           console.log("result", result);
           localStorage.setItem("jwt_admin", result.payload.access_token);
           toast.success("Dang nhap thanh cong");
-          navigate("/admin");
+          navigate("/admin/dashboard");
         });
       } catch (error) {
         console.error("An error occurred:", error);
