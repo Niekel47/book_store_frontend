@@ -10,6 +10,7 @@ import {
   fetchAllAuthor,
 } from "../../redux/slice/customer/productSlice";
 import { Link } from "react-router-dom";
+import ReactPaginate from "react-paginate";
 
 const ProductDetailList = () => {
   const URL_Image = UrlImage();
@@ -43,6 +44,10 @@ const ProductDetailList = () => {
     dispatch(fetchAllAuthor());
     // dispatch(getProductDetail());
   }, [selectedCategories, selectedAuthors, selectedPublishers, sortOrder]);
+   const Pagecount = useSelector(
+     (state) => state.customer.product
+   );
+   console.log("Pagecount", Pagecount);
 
   // Function to handle filter changes
   const handleFilterChange = (filterType, filterId) => {
@@ -75,9 +80,6 @@ const ProductDetailList = () => {
         break;
     }
   };
-  console.log("Selected categories: ", selectedCategories);
-  console.log("Selected authors: ", selectedAuthors);
-  console.log("Selected publishers: ", selectedPublishers);
   return (
     <>
       <div className="mt-4 mb-12">
@@ -205,6 +207,26 @@ const ProductDetailList = () => {
                 ))}
               </section>
             </div>
+            <ReactPaginate
+              nextLabel=" >"
+              // onPageChange={(e) => handlePageClick(e)}
+              pageRangeDisplayed={3}
+              marginPagesDisplayed={2}
+              // pageCount={Pagecount}
+              previousLabel="< "
+              pageClassName="page-item"
+              pageLinkClassName="page-link"
+              previousClassName="page-item"
+              previousLinkClassName="page-link"
+              nextClassName="page-item"
+              nextLinkClassName="page-link"
+              breakLabel="..."
+              breakClassName="page-item"
+              breakLinkClassName="page-link"
+              containerClassName="pagination"
+              activeClassName="active"
+              renderOnZeroPageCount={null}
+            />
           </div>
         </div>
       </div>

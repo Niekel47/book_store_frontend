@@ -22,6 +22,21 @@ const getOrder = async (page) => {
     withCredentials: true,
   });
 };
+const getAuthor = async (page) => {
+  return await axios.get(URL_API + `/author?page=${page}`, {
+    withCredentials: true,
+  });
+};
+const getCategory= async (page) => {
+  return await axios.get(URL_API + `/category?page=${page}`, {
+    withCredentials: true,
+  });
+};
+const getPublisher = async (page) => {
+  return await axios.get(URL_API + `/publisher?page=${page}`, {
+    withCredentials: true,
+  });
+};
 
 // const getProductAdmin = async () => {
 //   return await axios.get(URL_API + `/product`, {
@@ -29,4 +44,4 @@ const getOrder = async (page) => {
 //   });
 // };
 
-export { getOrder, getProductSearch };
+export { getOrder, getProductSearch,getAuthor,getCategory,getPublisher };

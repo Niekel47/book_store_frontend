@@ -15,32 +15,35 @@ import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import ModalAddAuthor from "../../components/admin/ModalAddAuthor";
 import { toast } from "react-toastify";
+import { getAuthor } from "../../axios/service";
 
 const AuthorManage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
+  const [listAuthor, setListAuthor] = useState([]);
   const [showModalAdd, setShowModalAdd] = useState(false);
-  const listAuthor = useSelector((state) => state.admin.product.listAuthor);
   const deleteAuthor = useSelector((state) => state.admin.product.deleteAuthor);
   const createAuthor = useSelector((state) => state.admin.product.createAuthor);
-  const totalPages = useSelector(
-    (state) => state.admin.product.totalPagesAuthor
-  );
-   const [toggle, setToggle] = useState(true);
-   const Toggle = () => {
-     setToggle(!toggle);
-   };
-  console.log("totalPages", totalPages);
-  // console.log("Pagecount", Pagecount);
-
+  const [toggle, setToggle] = useState(true);
+  const Toggle = () => {
+    setToggle(!toggle);
+  };
+  
   useEffect(() => {
-    dispatch(getAllAuthor(page)).then((res) => {
-      // const Pagecount = res;
-      setTotalPage(totalPages);
-    });
+    fetchAllAuthor();
   }, [page, createAuthor, deleteAuthor]);
+
+  const fetchAllAuthor = async () => {
+    try {
+      const res = await getAuthor(page);
+      setListAuthor(res.data.getallAuthor);
+      setTotalPage(res.data.totalPagesAuthor);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handlePageClick = (e) => {
     const currentPage = e.selected + 1;
@@ -100,24 +103,28 @@ const AuthorManage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {Array.isArray(listAuthor) &&
-                    listAuthor.map((authors, index) => (
-                      <tr key={authors.id}>
-                        <td>{index + 1}</td>
-                        <td>{authors.id}</td>
-                        <td>{authors.name}</td>
-                        <td>
-                          <MdDelete
-                            className="text-2xl mr-2 cursor-pointer text-red-700"
-                            onClick={() => deleteClick(authors.id)}
-                          />
-                          <FaEdit
-                            className="text-2xl mr-2 cursor-pointer text-yellow-500 ml-1"
-                            onClick={() => showEdit(authors)}
-                          />
-                        </td>
-                      </tr>
-                    ))}
+                  {listAuthor &&
+                    listAuthor.length > 0 &&
+                    listAuthor.map((item, index) => {
+                      const displayIndex = (page - 1) * 5 + index + 1;
+                      return (
+                        <tr key={index}>
+                          <th scope="row">{displayIndex}</th>
+                          <td>{item.id}</td>
+                          <td>{item.name}</td>
+                          <td>
+                            <MdDelete
+                              className="text-2xl mr-2 cursor-pointer text-red-700"
+                              onClick={() => deleteClick(item.id)}
+                            />
+                            <FaEdit
+                              className="text-2xl mr-2 cursor-pointer text-yellow-500 ml-1"
+                              onClick={() => showEdit(item)}
+                            />
+                          </td>
+                        </tr>
+                      );
+                    })}
                 </tbody>
               </table>
               <ReactPaginate
@@ -125,7 +132,7 @@ const AuthorManage = () => {
                 onPageChange={(e) => handlePageClick(e)}
                 pageRangeDisplayed={3}
                 marginPagesDisplayed={2}
-                pageCount={totalPages}
+                pageCount={totalPage}
                 previousLabel="< "
                 pageClassName="page-item"
                 pageLinkClassName="page-link"

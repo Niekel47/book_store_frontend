@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 // import { logout } from "../../redux/silce/admin/authSlice";
 import { toast } from "react-toastify";
 import { logoutAdmin, profileAdmin } from "../../redux/slice/admin/authSlice";
+import Logo from "../../assets/website/logo.png";
 const SideBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -56,7 +57,7 @@ const SideBar = () => {
       )}
       <hr className="text-dark" />
       <div className="" onClick={() => navigate("/admin")}>
-        <img src="" alt="" />
+        <img src={Logo} alt="" style={{width:"30px",height:"30px"}} />
         <a className="" onClick={() => navigate("/admin")}>
           Admin
         </a>

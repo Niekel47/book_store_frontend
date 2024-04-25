@@ -51,7 +51,7 @@ const ProductSearch = () => {
                   className="col-3"
                 >
                   <div>
-                    <Link to={`/detail/${item.id}`}>
+                    <Link to={`/product/${item.id}`}>
                       <img width={"100%"} src={item.image} alt="" />
                     </Link>
                   </div>

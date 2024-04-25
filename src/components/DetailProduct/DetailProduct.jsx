@@ -83,7 +83,7 @@ const DetailProduct = () => {
             </div>
             <div className="col-6">
               <div>
-                <p style={{ fontSize: "20px" }}>{productDetails.name}</p>
+                <p style={{ fontSize: "25px", fontWeight:"bold" }}>{productDetails.name}</p>
               </div>
               <div>
                 <p

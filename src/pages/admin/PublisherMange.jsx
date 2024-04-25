@@ -14,6 +14,7 @@ import { FaEdit } from "react-icons/fa";
 import { toast } from "react-toastify";
 import ModalAddPublisher from "../../components/admin/ModalAddPublisher";
 import SideBar from "../../components/admin/Sidebar";
+import { getPublisher } from "../../axios/service";
 
 
 
@@ -23,15 +24,13 @@ const PublisherManage = () => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
-  const [publishers, setPublishers] = useState([]);
+  const [listPublisher, setListPublisher] = useState([]);
   const [showModalAdd, setShowModalAdd] = useState(false);
    const [toggle, setToggle] = useState(true);
    const Toggle = () => {
      setToggle(!toggle);
    };
-  const listPublisher = useSelector(
-    (state) => state.admin.product.listPublisher
-  );
+  
   const deletePublisher = useSelector(
     (state) => state.admin.product.deletePublisher
   );
@@ -44,9 +43,18 @@ const PublisherManage = () => {
   );
 
   useEffect(() => {
-    dispatch(getAllPublisher(page));
-    setTotalPage(totalPagesPublihser);
+   fetchAllPublisher();
   }, [page, deletePublisher, createPublisher]);
+
+const fetchAllPublisher = async () => {
+  try {
+    const res = await getPublisher(page);
+    setListPublisher(res.data.getPublisher);
+    setTotalPage(res.data.totalPagesPublihser);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   const handlePageClick = (e) => {
     setPage(e.selected + 1);
@@ -80,7 +88,7 @@ const PublisherManage = () => {
 
           <div className="col">
             <div className="px-3">
-              <Nav Toggle={Toggle}/>
+              <Nav Toggle={Toggle} />
               <div className="flex justify-between">
                 <div className="text-gray-500 text-2xl">Quản lý NXB</div>
                 <button
@@ -101,24 +109,28 @@ const PublisherManage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {Array.isArray(listPublisher) &&
-                    listPublisher.map((publisher, index) => (
-                      <tr key={publisher.id}>
-                        <td>{index + 1}</td>
-                        <td>{publisher.id}</td>
-                        <td>{publisher.name}</td>
-                        <td>
-                          <MdDelete
-                            className="text-2xl mr-2 cursor-pointer text-red-700"
-                            onClick={() => deleteClick(publisher.id)}
-                          />
-                          <FaEdit
-                            className="text-2xl mr-2 cursor-pointer text-yellow-500 ml-1"
-                            onClick={() => showEdit(publisher)}
-                          />
-                        </td>
-                      </tr>
-                    ))}
+                  {listPublisher &&
+                    listPublisher.length > 0 &&
+                    listPublisher.map((item, index) => {
+                      const displayIndex = (page - 1) * 5 + index + 1;
+                      return (
+                        <tr key={index}>
+                          <th scope="row">{displayIndex}</th>
+                          <td>{item.id}</td>
+                          <td>{item.name}</td>
+                          <td>
+                            <MdDelete
+                              className="text-2xl mr-2 cursor-pointer text-red-700"
+                              onClick={() => deleteClick(item.id)}
+                            />
+                            <FaEdit
+                              className="text-2xl mr-2 cursor-pointer text-yellow-500 ml-1"
+                              onClick={() => showEdit(item)}
+                            />
+                          </td>
+                        </tr>
+                      );
+                    })}
                 </tbody>
               </table>
               <ReactPaginate
@@ -126,7 +138,7 @@ const PublisherManage = () => {
                 onPageChange={(e) => handlePageClick(e)}
                 pageRangeDisplayed={3}
                 marginPagesDisplayed={2}
-                pageCount={totalPagesPublihser}
+                pageCount={totalPage}
                 previousLabel="< "
                 pageClassName="page-item"
                 pageLinkClassName="page-link"

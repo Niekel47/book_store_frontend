@@ -14,6 +14,7 @@ import {
 } from "../../redux/slice/admin/productSlice";
 import ModalAddCategory from "../../components/admin/ModalAddCategory";
 import { toast } from "react-toastify";
+import { getCategory } from "../../axios/service";
 
 const CategoryManage = () => {
   const navigate = useNavigate();
@@ -22,9 +23,8 @@ const CategoryManage = () => {
   const [toggle, setToggle] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
-  const [categories, setCategories] = useState([]);
+  const [listCategory, setListCategory] = useState([]);
   const [showModalAdd, setShowModalAdd] = useState(false);
-  const listCategory = useSelector((state) => state.admin.product.listCategory);
   const deleteCategory = useSelector(
     (state) => state.admin.product.deleteCategory
   );
@@ -37,9 +37,20 @@ const CategoryManage = () => {
   );
 
   useEffect(() => {
-    dispatch(getAllCategory(page));
-    setTotalPage(totalPagesCat);
+    // dispatch(getAllCategory(page));
+    // setTotalPage(totalPagesCat);
+    fetchAllCategory();
   }, [page, createCategory, deleteCategory]);
+
+  const fetchAllCategory= async () => {
+    try {
+      const res = await getCategory(page);
+      setListCategory(res.data.getallcat);
+      setTotalPage(res.data.totalPagesCat);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handlePageClick = (e) => {
     const currentPage = e.selected + 1;
@@ -106,7 +117,7 @@ const CategoryManage = () => {
                         <tr key={index}>
                           <th scope="row">{displayIndex}</th>
                           <td>{item.id}</td>
-                          <td style={{ width: "400px" }}>{item.name}</td>
+                          <td>{item.name}</td>
                           <td>
                             <MdDelete
                               className="text-2xl mr-2 cursor-pointer text-red-700"
@@ -127,7 +138,7 @@ const CategoryManage = () => {
                 onPageChange={(e) => handlePageClick(e)}
                 pageRangeDisplayed={3}
                 marginPagesDisplayed={2}
-                pageCount={totalPagesCat}
+                pageCount={totalPage}
                 previousLabel="< "
                 pageClassName="page-item"
                 pageLinkClassName="page-link"

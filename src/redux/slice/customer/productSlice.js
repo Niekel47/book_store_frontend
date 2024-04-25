@@ -38,7 +38,10 @@ export const fetchAllProduct = createAsyncThunk(
   async (params) => {
     try {
       const res = await axios.get(URL_API + `product`, { params });
-      return res.data.products;
+      const totalPagesProduct = await res.data.totalPages;
+      console.log("totalPages", totalPagesProduct);
+      const data = res.data.products;
+      return { data, totalPagesProduct };
     } catch (error) {
       console.log(error);
     }
@@ -161,7 +164,9 @@ export const productSlice = createSlice({
         state.isError = false;
       })
       .addCase(fetchAllProduct.fulfilled, (state, action) => {
-        state.listProduct = action.payload;
+        state.listProduct = action.payload.data;
+        state.totalPagesProduct = action.payload.totalPages;
+        console.log("action.payload", action.payload);
         state.isLoading = false;
         state.isError = false;
       })
