@@ -38,12 +38,6 @@ const Navbar = ({ handleOrderPopup }) => {
   const navigatePage = (page) => {
     navigate(page);
   };
-  const isSuccessLogin = useSelector(
-    (state) => state.customer.auth.isSuccessLogin
-  );
-  const isSuccessLogout = useSelector(
-    (state) => state.customer.isSuccessLogout
-  );
   const userProfile = useSelector(
     (state) => state.customer.auth.isSuccessProfile
   );
@@ -69,10 +63,10 @@ const Navbar = ({ handleOrderPopup }) => {
       dispatch(profile());
       // dispatch(updateCartQuantity(cartTotalQuantity));
     }
-    if (userProfile){
+    if (userProfile) {
       dispatch(getTotal());
-    } ;
-  }, [isSuccessLogin, cartTotalQuantity, cart]);
+    }
+  }, [cartTotalQuantity, cart]);
 
   return (
     <>

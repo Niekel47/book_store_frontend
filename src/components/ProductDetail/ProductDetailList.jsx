@@ -223,26 +223,28 @@ const ProductDetailList = () => {
                 ))}
               </section>
             </div>
-            <ReactPaginate
-              nextLabel=" >"
-              onPageChange={(e) => handlePageClick(e)}
-              pageRangeDisplayed={3}
-              marginPagesDisplayed={2}
-              pageCount={Pagecount}
-              previousLabel="< "
-              pageClassName="page-item"
-              pageLinkClassName="page-link"
-              previousClassName="page-item"
-              previousLinkClassName="page-link"
-              nextClassName="page-item"
-              nextLinkClassName="page-link"
-              breakLabel="..."
-              breakClassName="page-item"
-              breakLinkClassName="page-link"
-              containerClassName="pagination"
-              activeClassName="active"
-              renderOnZeroPageCount={null}
-            />
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <ReactPaginate
+                nextLabel=" >"
+                onPageChange={(e) => handlePageClick(e)}
+                pageRangeDisplayed={3}
+                marginPagesDisplayed={2}
+                pageCount={Pagecount}
+                previousLabel="< "
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                previousClassName="page-item"
+                previousLinkClassName="page-link"
+                nextClassName="page-item"
+                nextLinkClassName="page-link"
+                breakLabel="..."
+                breakClassName="page-item"
+                breakLinkClassName="page-link"
+                containerClassName="pagination"
+                activeClassName="active"
+                renderOnZeroPageCount={null}
+              />
+            </div>
           </div>
         </div>
       </div>

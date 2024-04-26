@@ -15,6 +15,10 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import PieChartComponent from "./PieChart";
+import PieChartTotal from "./PieChartTotal";
+import { calculateRevenue } from "./convertDataChart";
+import PieChartDoanhThu from "./PieChartDoanhThu";
 
 const OrderManage = () => {
   const navigate = useNavigate();
@@ -48,6 +52,10 @@ const OrderManage = () => {
   const handlePageClick = (e) => {
     setPage(e.selected + 1);
   };
+  const paymentData = listOrder.map((order) => order.payment);
+  const totalData = listOrder.map((order) => order.total);
+  const revenueData = calculateRevenue(listOrder);
+  console.log("revenueData", revenueData);
   const displayStatus = (status, order_id) => {
     let statusContent;
     switch (status) {
@@ -121,9 +129,8 @@ const OrderManage = () => {
         showModal={showModal}
         handleClose={handleClose}
       />
-      <div
-        className="container-fluid bg min-vh-100 bg-gray-300 "
-      >
+
+      <div className="container-fluid bg min-vh-100 bg-gray-300 ">
         <div className="row ">
           {toggle && (
             <div className="col-4 col-md-2 bg-white vh-100 position-fixed">
@@ -131,12 +138,20 @@ const OrderManage = () => {
             </div>
           )}
           {toggle && <div className="col-4 col-md-2"></div>}
+
           <div className="col">
             <div className="px-3">
               <Nav Toggle={Toggle} />
+              <div className="flex justify-center">
+                <PieChartComponent data={paymentData} />
+                <PieChartTotal data={totalData} />
+                <PieChartDoanhThu data={revenueData} />
+              </div>
+
               <div className="container-fluid"></div>
               <table className="table caption-top bg-white rounded mt-2">
                 <caption className="text fs-4">QUẢN LÝ ĐƠN HÀNG</caption>
+
                 <thead>
                   <tr>
                     <th scope="col">STT</th>

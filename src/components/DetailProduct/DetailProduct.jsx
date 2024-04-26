@@ -89,18 +89,24 @@ const DetailProduct = () => {
                 </p>
               </div>
               <div>
-                <p style={{ fontSize: "18px", fontWeight: "bold" }}>
-                  Tác giả:{productDetails.Author.name}
+                <p style={{ fontSize: "18px", fontWeight: "bold" }}>Tác giả:</p>
+                <p style={{ textAlign: "justify", fontSize: "15px" }}>
+                  {productDetails.Author.name}
                 </p>
               </div>
               <div>
                 <p style={{ fontSize: "18px", fontWeight: "bold" }}>
-                  Nhà xuất bản:{productDetails.Publisher.name}
+                  Nhà xuất bản:
+                </p>
+                <p style={{ textAlign: "justify", fontSize: "15px" }}>
+                  {productDetails.Publisher.name}
                 </p>
               </div>
               <div>
                 <p style={{ fontSize: "18px", fontWeight: "bold" }}>
                   Danh mục:
+                </p>
+                <p style={{ textAlign: "justify", fontSize: "15px" }}>
                   {productDetails.Categories &&
                     productDetails.Categories.map((category, index) => (
                       <span key={index}> {category.name}</span>
@@ -187,14 +193,14 @@ const DetailProduct = () => {
               <div>
                 <FaStar style={{ marginRight: "10px", color: "#e3c01c" }} />(
               </div> */}
-              <div style={{ marginTop: "20px" }}>
+              <div className="mt-5 hover:to-blue-700 ">
                 <button
                   style={{
                     backgroundColor: "#883731 ",
                     borderColor: "#883731 ",
                   }}
                   type="button"
-                  className="btn btn-primary"
+                  className="btn btn-primary hover:to-blue-700"
                   onClick={() => addTocartClick(productDetails, quantity)}
                 >
                   <FaCartShopping /> Thêm giỏ hàng

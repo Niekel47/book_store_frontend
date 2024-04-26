@@ -11,6 +11,7 @@ import {
   fetchWards,
 } from "../../redux/slice/customer/productSlice";
 import { loadStripe } from "@stripe/stripe-js";
+import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 
 const Order = () => {
   const navigate = useNavigate();
@@ -23,6 +24,10 @@ const Order = () => {
   const [selectedDistrictId, setSelectedDistrictId] = useState("");
   const [ward_id, setWardId] = useState([]);
   const [selectedWardId, setSelectedWardId] = useState("");
+  const [transactionId, setTransactionId] = useState("");
+  const [sessionId, setSessionId] = useState("");
+  console.log("sessionId", sessionId);
+  console.log("transactionId", transactionId);
   const cart = useSelector((state) => state.customer.cart.cartItem);
   const cartTotalAmount = useSelector(
     (state) => state.customer.cart.cartTotalAmount
@@ -30,7 +35,7 @@ const Order = () => {
   const userProfile = useSelector(
     (state) => state.customer.auth.isSuccessProfile
   );
-  
+
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
@@ -114,6 +119,8 @@ const Order = () => {
           phone: phone,
           user_id: user_id,
           payment: payment,
+          transactionId: transactionId,
+          sessionId: sessionId,
         },
       };
       dispatch(addOrder(data_order)).then((result) => {
@@ -124,23 +131,61 @@ const Order = () => {
           setAddress("");
           setPayment("");
           setProvinceId("");
-          setSelectedDistrictId("")
-          setSelectedWardId("")
+          setSelectedDistrictId("");
+          setSelectedWardId("");
           toast.success(`${result.payload.message}`);
         }
       });
     }
   };
-  const Stripe = async() => {
+  const onApproveOrder = (data, actions) => {
+    return actions.order
+      .capture()
+      .then((details) => {
+        // Check if order details are valid
+        setTransactionId(details.id);
+        dispatch(clearCart());
+        toast.success("Payment successful!");
+        setName("");
+        setPhone("");
+        setAddress("");
+        setPayment("");
+        setProvinceId("");
+        setSelectedDistrictId("");
+        setSelectedWardId("");
+      })
+      .catch((error) => {
+        // Handle any errors from the capture process
+        console.log("Payment failed:", error);
+      });
+  };
+  const onCreateOrder = (data, actions) => {
+    // Convert total from VND to USD
+    const exchangeRate = 23000; // Replace this with the current exchange rate
+    const totalInUSD = (cartTotalAmount / exchangeRate).toFixed(2); // Use toFixed(2) to round to 2 decimal places
+
+    return actions.order.create({
+      purchase_units: [
+        {
+          amount: {
+            value: totalInUSD, // Use total in USD
+            currency_code: "USD", // Specify the currency as USD
+          },
+        },
+      ],
+    });
+  };
+
+  const Stripe = async () => {
     const stripe = await loadStripe(
       "pk_test_51P65guRqcbVXZc9kNNZYEf7PX8R8awgYBsrJ5WMUQr36tXYmCjRUwu4U0RYnhWULM9P4aXcQLHuFn3Ozo8kmXfqg00I0soTrZc"
     );
     const body = {
-      products:cart
-    }
-    const headers =  {
-      "Content-type": "application/json"
-    }
+      products: cart,
+    };
+    const headers = {
+      "Content-type": "application/json",
+    };
     const response = await fetch(
       "http://localhost:3001/api/stripe/create-checkout-session",
       {
@@ -150,14 +195,15 @@ const Order = () => {
       }
     );
     const session = await response.json();
+    setSessionId(session.id);
     console.log("session", session);
-     const result = stripe.redirectToCheckout({
-       sessionId: session.id,
-     });
-    if(result.error){
+    const result = stripe.redirectToCheckout({
+      sessionId: session.id,
+    });
+    if (result.error) {
       console.log(result.error);
     }
-  }
+  };
 
   return (
     <div style={{ marginTop: "50px" }} className="container-fluid">
@@ -268,7 +314,7 @@ const Order = () => {
               backgroundColor: "#f5f5f5",
             }}
           >
-            <div style={{ paddingLeft: "55px", paddingTop: "50px" }}>
+            <div style={{ paddingLeft: "55px", paddingTop: "10px" }}>
               <h5>THÀNH TIỀN</h5>
               <div style={{ marginTop: "20px" }} className="row">
                 <div className="col-6">
@@ -314,7 +360,7 @@ const Order = () => {
                     Thanh toán paypal
                   </label>
                 </div>
-                {/* <div style={{ marginTop: "20px" }} className="form-check">
+                <div style={{ marginTop: "20px" }} className="form-check">
                   <input
                     style={{ borderColor: "#883731" }}
                     className="form-check-input"
@@ -325,45 +371,62 @@ const Order = () => {
                   />
                   <label
                     className="form-check-label"
-                    htmlFor="flexRadioDefault2"
+                    htmlFor="flexRadioDefault3"
                   >
                     Thanh toán Stripe
                   </label>
-                </div> */}
+                </div>
               </div>
               <div style={{ marginTop: "20px" }}>
-                <button
-                  style={{
-                    width: "80%",
-                    height: "45px",
-                    border: "none",
-                    borderRadius: "15px",
-                    margin: "auto",
-                    backgroundColor: "#ca1515",
-                    color: "white",
-                    fontWeight: "bold",
-                  }}
-                  onClick={() => orderClick()}
-                >
-                  ĐẶT HÀNG
-                </button>
-              </div>
-              <div style={{ marginTop: "20px" }}>
-                <button
-                  style={{
-                    width: "80%",
-                    height: "45px",
-                    border: "none",
-                    borderRadius: "15px",
-                    margin: "auto",
-                    backgroundColor: "#ca1515",
-                    color: "white",
-                    fontWeight: "bold",
-                  }}
-                  onClick={() => Stripe()}
-                >
-                  ĐẶT HÀNG STRIPE
-                </button>
+                {payment === "off" && (
+                  <button
+                    style={{
+                      width: "80%",
+                      height: "45px",
+                      border: "none",
+                      borderRadius: "15px",
+                      margin: "auto",
+                      backgroundColor: "#ca1515",
+                      color: "white",
+                      fontWeight: "bold",
+                    }}
+                    onClick={() => orderClick()}
+                  >
+                    ĐẶT HÀNG
+                  </button>
+                )}
+                {payment === "stripe" && (
+                  <button
+                    style={{
+                      width: "80%",
+                      height: "45px",
+                      border: "none",
+                      borderRadius: "15px",
+                      margin: "auto",
+                      backgroundColor: "#ca1515",
+                      color: "white",
+                      fontWeight: "bold",
+                    }}
+                    onClick={() => Stripe()}
+                  >
+                    ĐẶT HÀNG STRIPE
+                  </button>
+                )}
+                {payment === "paypal" && (
+                  <PayPalButtons
+                    style={{
+                      layout: "vertical",
+                      color: "blue",
+                      shape: "pill",
+                      label: "paypal",
+                      height: 45,
+                    }}
+                    createOrder={(data, actions) =>
+                      onCreateOrder(data, actions)
+                    }
+                    onApprove={(data, actions) => onApproveOrder(data, actions)}
+                  />
+                )}
               </div>
             </div>
           </div>
