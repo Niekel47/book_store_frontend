@@ -19,7 +19,6 @@ const DetailProduct = () => {
   const productDetails = useSelector(
     (state) => state.customer.product.productDetail
   );
-  console.log("productDetails", productDetails);
   const userProfile = useSelector(
     (state) => state.customer.auth.isSuccessProfile
   );

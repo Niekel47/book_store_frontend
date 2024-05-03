@@ -39,7 +39,6 @@ export const fetchAllProduct = createAsyncThunk(
     try {
       const res = await axios.get(URL_API + `product`, { params });
       const totalPagesProduct = await res.data.totalPages;
-      console.log("totalPages", totalPagesProduct);
       const data = res.data.products;
       return { data, totalPagesProduct };
     } catch (error) {

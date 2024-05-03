@@ -26,8 +26,7 @@ const Order = () => {
   const [selectedWardId, setSelectedWardId] = useState("");
   const [transactionId, setTransactionId] = useState("");
   const [sessionId, setSessionId] = useState("");
-  console.log("sessionId", sessionId);
-  console.log("transactionId", transactionId);
+  
   const cart = useSelector((state) => state.customer.cart.cartItem);
   const cartTotalAmount = useSelector(
     (state) => state.customer.cart.cartTotalAmount
@@ -123,6 +122,9 @@ const Order = () => {
           sessionId: sessionId,
         },
       };
+      console.log("data_order", data_order);
+      console.log("sessionId", sessionId);
+      console.log("transactionId", transactionId);
       dispatch(addOrder(data_order)).then((result) => {
         if (result.payload.success === true) {
           dispatch(clearCart());
@@ -144,6 +146,8 @@ const Order = () => {
       .then((details) => {
         // Check if order details are valid
         setTransactionId(details.id);
+        orderClick();
+        console.log("details",details)
         dispatch(clearCart());
         toast.success("Payment successful!");
         setName("");
@@ -204,6 +208,7 @@ const Order = () => {
       console.log(result.error);
     }
   };
+  
 
   return (
     <div style={{ marginTop: "50px" }} className="container-fluid">
