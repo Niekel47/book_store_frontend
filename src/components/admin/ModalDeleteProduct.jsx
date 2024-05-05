@@ -15,10 +15,16 @@ const ModalDeleteProduct = ({
       </Modal.Header>
       <Modal.Body>Bạn có chắc chắn muốn xóa sản phẩm này không?</Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleCloseDelete}>
+        <Button
+          className="px-4 py-2 text-white bg-gray-500 rounded hover:bg-gray-400"
+          onClick={handleCloseDelete}
+        >
           Đóng
         </Button>
-        <Button variant="danger" onClick={() => deleteClick(productToDelete)}>
+        <Button
+          className="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-400 ml-2"
+          onClick={() => deleteClick(productToDelete)}
+        >
           Xóa
         </Button>
       </Modal.Footer>
