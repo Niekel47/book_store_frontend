@@ -16,6 +16,7 @@ import {
 } from "../../redux/slice/admin/productSlice";
 import { useDispatch, useSelector } from "react-redux";
 import SideBar from "../../components/admin/Sidebar";
+import ModalDeleteProduct from "../../components/admin/ModalDeleteProduct";
 
 const ProductManage = () => {
   const navigate = useNavigate();
@@ -26,6 +27,8 @@ const ProductManage = () => {
   const [showModalAdd, setShowModalAdd] = useState(false);
   const [showModalEdit, setShowModalEdit] = useState(false);
   const [productEdit, setProductEdit] = useState({});
+  const [showModalDelete, setShowModalDelete] = useState(false);
+  const [productToDelete, setProductToDelete] = useState(null);
   const dispatch = useDispatch();
   const deleteProduct = useSelector(
     (state) => state.admin.product.deleteProduct
@@ -68,15 +71,30 @@ const ProductManage = () => {
     setShowModalAdd(true);
   };
   const deleteClick = async (product_id) => {
-    dispatch(handleDeleteProduct(product_id)).then((res) => {
-      toast.success("Xoa thanh cong");
-    });
+    setShowModalDelete(true);
+    setProductToDelete(product_id);
   };
+   const handleCloseDelete = () => {
+     setShowModalDelete(false);
+   };
+
+   const handleDelete = (product_id) => {
+     dispatch(handleDeleteProduct(product_id)).then((res) => {
+       toast.success("Xoa thanh cong");
+       setShowModalDelete(false);
+     });
+   };
 
   return (
     <>
       <div className="container-fluid bg min-vh-100 bg-gray-300 ">
         <div className="row ">
+          <ModalDeleteProduct
+            showModalDelete={showModalDelete}
+            handleCloseDelete={handleCloseDelete}
+            deleteClick={handleDelete}
+            productToDelete={productToDelete}
+          />
           {toggle && (
             <div className="col-4 col-md-2 bg-white vh-100 position-fixed">
               <SideBar />
