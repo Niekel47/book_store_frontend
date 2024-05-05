@@ -51,6 +51,7 @@ const OrderManage = () => {
   };
   const handlePageClick = (e) => {
     setPage(e.selected + 1);
+    fetchAllOrder(e.selected + 1);
   };
   const paymentData = listOrder.map((order) => order.payment);
   const totalData = listOrder.map((order) => order.total);

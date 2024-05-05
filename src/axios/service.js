@@ -18,7 +18,7 @@ const getProductSearch = async (name, page) => {
 // };
 
 const getOrder = async (page) => {
-  return await axios.get(URL_API + `/order?page=${page}`, {
+  return await axios.get(URL_API + `order?page=${page}`, {
     withCredentials: true,
   });
 };
