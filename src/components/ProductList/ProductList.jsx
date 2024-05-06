@@ -41,9 +41,9 @@ const ProductList = () => {
           {/* header */}
           <div className="text-center mb-10 max-w-[600px] mx-auto">
             <p className="text-sm bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-              Top Books for you
+              Sách Hay dành cho Bạn
             </p>
-            <h1 className="text-3xl font-bold">Top Books</h1>
+            <h1 className="text-3xl font-bold">Sách HOT</h1>
           </div>
 
           {/* Body section */}
@@ -83,7 +83,7 @@ const ProductList = () => {
                 className="text-center mt-10 cursor-pointer  bg-primary text-white py-1 px-5 rounded-md"
                 onClick={Detail}
               >
-                View All Books
+                Xem tất cả
               </button>
             </div>
           </div>

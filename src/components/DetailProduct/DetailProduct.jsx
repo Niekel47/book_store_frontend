@@ -164,42 +164,10 @@ const DetailProduct = () => {
                   onChange={(event) => setQuantity(event.target.value)}
                 />
               </div>
-              {/* <div style={{ marginTop: "10px", fontSize: "18px" }}>
-                (Đánh giá: {countRate} lượt)
-              </div> */}
-              {/* <div>
-                <FaStar style={{ marginRight: "10px", color: "#e3c01c" }} />
-                <FaStar style={{ marginRight: "10px", color: "#e3c01c" }} />
-                <FaStar style={{ marginRight: "10px", color: "#e3c01c" }} />
-                <FaStar style={{ marginRight: "10px", color: "#e3c01c" }} />
-                <FaStar style={{ marginRight: "10px", color: "#e3c01c" }} />(
-              </div>
-              <div>
-                <FaStar style={{ marginRight: "10px", color: "#e3c01c" }} />
-                <FaStar style={{ marginRight: "10px", color: "#e3c01c" }} />
-                <FaStar style={{ marginRight: "10px", color: "#e3c01c" }} />
-                <FaStar style={{ marginRight: "10px", color: "#e3c01c" }} />(
-              </div>
-              <div>
-                <FaStar style={{ marginRight: "10px", color: "#e3c01c" }} />
-                <FaStar style={{ marginRight: "10px", color: "#e3c01c" }} />
-                <FaStar style={{ marginRight: "10px", color: "#e3c01c" }} />(
-              </div>
-              <div>
-                <FaStar style={{ marginRight: "10px", color: "#e3c01c" }} />
-                <FaStar style={{ marginRight: "10px", color: "#e3c01c" }} />(
-              </div>
-              <div>
-                <FaStar style={{ marginRight: "10px", color: "#e3c01c" }} />(
-              </div> */}
               <div className="mt-5 hover:to-blue-700 ">
                 <button
-                  style={{
-                    backgroundColor: "#883731 ",
-                    borderColor: "#883731 ",
-                  }}
                   type="button"
-                  className="btn btn-primary hover:to-blue-700"
+                  className="text-red-900 btn btn-secondary hover:to-blue-700"
                   onClick={() => addTocartClick(productDetails, quantity)}
                 >
                   <FaCartShopping /> Thêm giỏ hàng
@@ -207,33 +175,6 @@ const DetailProduct = () => {
               </div>
             </div>
           </div>
-          {/* <div style={{ marginTop: "80px" }} className="container">
-            <h5 style={{ marginBottom: "40px", color: "gray" }}>
-              ĐÁNH GIÁ SẢN PHẨM
-            </h5>
-            {rate && rate.length > 0 ? (
-              rate.map((item, index) => {
-                return (
-                  <div key={`rate-${index}`}>
-                    <div>
-                      <FaUserCircle style={{ fontSize: "40px" }} />{" "}
-                      {item.User.name}
-                    </div>
-                    <div style={{ marginLeft: "40px" }}>
-                      <div>{formatDate(item.createdAt)}</div>
-                      <div>{displayRate(item.star)}</div>
-                      <p style={{ fontSize: "18px" }}>{item.comment}</p>
-                    </div>
-                    <hr />
-                  </div>
-                );
-              })
-            ) : (
-              <div style={{ fontSize: "18px", color: "gray" }}>
-                Sản phẩm chưa có đánh giá !
-              </div>
-            )}
-          </div> */}
         </div>
       )}
     </>

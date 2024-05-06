@@ -112,7 +112,7 @@ const ProductDetailList = () => {
           <div className="">
             {/* Filters */}
             <div className="flex justify-between mb-5">
-              <div className="w-[19%] ">
+              <div className="w-[16%] ">
                 <h2 className="text-lg font-semibold mb-2">Tìm kiếm sản phẩm</h2>
                 <div className="mb-3">
                   <label htmlFor="sortOrder" className="mr-2">
@@ -191,7 +191,7 @@ const ProductDetailList = () => {
                 </ul>
               </div>
               {/* Products */}
-              <section className="w-[80%] grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-start gap-5 section-name padding-y-sm ">
+              <section className="w-[70%] grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 place-items-start gap-5 section-name padding-y-sm ">
                 {/* Card */}
                 {listProducts.map((item, index) => (
                   <div key={item.id} className="div space-y-3 ">
