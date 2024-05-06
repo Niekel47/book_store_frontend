@@ -16,6 +16,7 @@ import { FaEdit } from "react-icons/fa";
 import ModalAddAuthor from "../../components/admin/ModalAddAuthor";
 import { toast } from "react-toastify";
 import { getAuthor } from "../../axios/service";
+import ModalDeleteAuthor from "../../components/admin/ModalDeleteAuthor";
 
 const AuthorManage = () => {
   const navigate = useNavigate();
@@ -27,6 +28,8 @@ const AuthorManage = () => {
   const deleteAuthor = useSelector((state) => state.admin.product.deleteAuthor);
   const createAuthor = useSelector((state) => state.admin.product.createAuthor);
   const [toggle, setToggle] = useState(true);
+  const [showModalDelete, setShowModalDelete] = useState(false);
+  const [authorToDelete, setAuthorToDelete] = useState(null);
   const Toggle = () => {
     setToggle(!toggle);
   };
@@ -59,7 +62,11 @@ const AuthorManage = () => {
     setShowModalAdd(false);
   };
 
-  const deleteClick = async (author_id) => {
+  const deleteClick = (author_id) => {
+    setAuthorToDelete(author_id);
+    setShowModalDelete(true);
+  };
+  const HandledeleteClick = async (author_id) => {
     dispatch(handleDeleteAuthor(author_id)).then((res) => {
       toast.success("Xoa thanh cong");
     });
@@ -67,6 +74,12 @@ const AuthorManage = () => {
 
   return (
     <>
+      <ModalDeleteAuthor
+        showModalDelete={showModalDelete}
+        handleCloseDelete={() => setShowModalDelete(false)}
+        deleteClick={HandledeleteClick}
+        authorToDelete={authorToDelete}
+      />
       <div className="container-fluid bg min-vh-100 bg-gray-300 ">
         <div className="row ">
           {toggle && (

@@ -15,6 +15,7 @@ import {
 import ModalAddCategory from "../../components/admin/ModalAddCategory";
 import { toast } from "react-toastify";
 import { getCategory } from "../../axios/service";
+import ModalDeleteCategory from "../../components/admin/ModalDeleteCategory";
 
 const CategoryManage = () => {
   const navigate = useNavigate();
@@ -25,6 +26,8 @@ const CategoryManage = () => {
   const [totalPage, setTotalPage] = useState(0);
   const [listCategory, setListCategory] = useState([]);
   const [showModalAdd, setShowModalAdd] = useState(false);
+  const [showModalDelete, setShowModalDelete] = useState(false);
+  const [categoryToDelete, setCategoryToDelete] = useState(null);
   const deleteCategory = useSelector(
     (state) => state.admin.product.deleteCategory
   );
@@ -66,6 +69,8 @@ const CategoryManage = () => {
     setShowModalAdd(false);
   };
 
+
+  
   const deleteClick = async (category_id) => {
     dispatch(handleDeleteCategory(category_id)).then((res) => {
       toast.success("Xoa thanh cong");
@@ -74,6 +79,12 @@ const CategoryManage = () => {
 
   return (
     <>
+      <ModalDeleteCategory
+        showModalDelete={showModalDelete}
+        handleCloseDelete={() => setShowModalDelete(false)}
+        deleteClick={deleteClick}
+        categoryToDelete={categoryToDelete}
+      />
       <div className="container-fluid bg min-vh-100 bg-gray-300 ">
         <div className="row ">
           {toggle && (
