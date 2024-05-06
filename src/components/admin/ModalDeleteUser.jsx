@@ -34,7 +34,10 @@ const ModalDeleteUser = (props) => {
           >
             Hủy
           </Button>
-          <Button variant="danger" onClick={deleteUser}>
+          <Button
+            className="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-400 ml-2"
+            onClick={deleteUser}
+          >
             Xóa
           </Button>
         </Modal.Footer>
