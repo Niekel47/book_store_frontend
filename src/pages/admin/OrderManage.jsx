@@ -19,6 +19,8 @@ import PieChartComponent from "./PieChart";
 import PieChartTotal from "./PieChartTotal";
 import { calculateRevenue } from "./convertDataChart";
 import PieChartDoanhThu from "./PieChartDoanhThu";
+import ModalDeleteOrder from "../../components/admin/ModelDeleteOrder";
+
 
 const OrderManage = () => {
   const navigate = useNavigate();
@@ -33,6 +35,8 @@ const OrderManage = () => {
   const [showModal, setShowModal] = useState(false);
   const [dataOrder, setDataOrder] = useState({});
   const [revenueData, setRevenueData] = useState([]);
+  const [orderToDelete, setOrderToDelete] = useState(null);
+  const [showModalDelete, setShowModalDelete] = useState(false);
   console.log("revenueData", revenueData);
  
   const Toggle = () => {
@@ -124,10 +128,17 @@ const OrderManage = () => {
     }
   };
 
-  const deleteClick = (order_id) => {
-    dispatch(handleDeleteOrder(order_id));
-    toast.success("Xóa đơn hàng thành công!")
-  };
+ const deleteClick = (order_id) => {
+   setOrderToDelete(order_id);
+   setShowModalDelete(true);
+ };
+
+ const handleDelete = (order_id) => {
+   dispatch(handleDeleteOrder(order_id)).then((res) => {
+     toast.success("Xoa thanh cong");
+     setShowModalDelete(false);
+   });
+ };
   return (
     <>
       <ModalOrder
@@ -135,7 +146,12 @@ const OrderManage = () => {
         showModal={showModal}
         handleClose={handleClose}
       />
-
+      <ModalDeleteOrder
+        showModalDelete={showModalDelete}
+        handleCloseDelete={() => setShowModalDelete(false)}
+        deleteClick={handleDelete}
+        orderToDelete={orderToDelete}
+      />
       <div className="container-fluid bg min-vh-100 bg-gray-300 ">
         <div className="row ">
           {toggle && (
