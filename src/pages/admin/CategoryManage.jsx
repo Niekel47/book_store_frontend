@@ -69,8 +69,11 @@ const CategoryManage = () => {
     setShowModalAdd(false);
   };
 
+const HandledeleteClick = (category_id) => {
+  setCategoryToDelete(category_id);
+  setShowModalDelete(true);
+};
 
-  
   const deleteClick = async (category_id) => {
     dispatch(handleDeleteCategory(category_id)).then((res) => {
       toast.success("Xoa thanh cong");
