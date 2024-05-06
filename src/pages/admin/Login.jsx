@@ -47,9 +47,13 @@ const Login = () => {
         };
         dispatch(loginAdmin(data_user)).then((result) => {
           console.log("result", result);
-          localStorage.setItem("jwt_admin", result.payload.access_token);
-          toast.success("Dang nhap thanh cong");
-          navigate("/admin/dashboard");
+         if (result.payload.status === "OK") {
+           localStorage.setItem("jwt_admin", result.payload.access_token);
+           toast.success("Đăng nhập thành công");
+           navigate("/admin/dashboard");
+         } else {
+           toast.error(result.payload.message);
+         }
         });
       } catch (error) {
         console.error("An error occurred:", error);

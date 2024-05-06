@@ -47,13 +47,17 @@ const Login = () => {
           password: password,
         };
         dispatch(login(data_user)).then((result) => {
-          localStorage.setItem("jwt", result.payload.access_token);
-          toast.success("Dang nhap thanh cong");
-          navigate("/");
+          if (result.payload.status === "OK") {
+            localStorage.setItem("jwt", result.payload.access_token);
+            toast.success("Dang nhap thanh cong");
+            navigate("/");
+          } else {
+            toast.error(result.payload.message);
+          }
         });
       } catch (error) {
-        console.error("An error occurred:", error);
-        toast.error("An error occurred while registering user.");
+        console.error("Vui lòng kiểm tra lại thông tin đăng nhập", error);
+        toast.error("Vui lòng kiểm tra lại thông tin đăng nhập");
       }
     }
   };

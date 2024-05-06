@@ -31,6 +31,7 @@ const initialState = {
   createProduct: null,
   deleteProduct: null,
   updateProduct: null,
+  updateAuthor: null,
 };
 
 export const getAllCategory = createAsyncThunk(
