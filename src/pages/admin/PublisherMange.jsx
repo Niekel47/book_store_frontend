@@ -74,6 +74,7 @@ const PublisherManage = () => {
     dispatch(handleDeletePublisher(publisher_id)).then((res) => {
       toast.success("Xoa thanh cong");
     });
+    setShowModalDelete(false);
   };
 
   return (

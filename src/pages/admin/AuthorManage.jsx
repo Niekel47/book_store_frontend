@@ -70,6 +70,7 @@ const AuthorManage = () => {
     dispatch(handleDeleteAuthor(author_id)).then((res) => {
       toast.success("Xoa thanh cong");
     });
+    setShowModalDelete(false);
   };
 
   return (
