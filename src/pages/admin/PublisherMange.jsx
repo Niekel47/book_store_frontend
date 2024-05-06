@@ -15,8 +15,7 @@ import { toast } from "react-toastify";
 import ModalAddPublisher from "../../components/admin/ModalAddPublisher";
 import SideBar from "../../components/admin/Sidebar";
 import { getPublisher } from "../../axios/service";
-
-
+import ModalDeletePublisher from "../../components/admin/ModalDeletePublisher";
 
 const PublisherManage = () => {
   const navigate = useNavigate();
@@ -26,11 +25,13 @@ const PublisherManage = () => {
   const [totalPage, setTotalPage] = useState(0);
   const [listPublisher, setListPublisher] = useState([]);
   const [showModalAdd, setShowModalAdd] = useState(false);
-   const [toggle, setToggle] = useState(true);
-   const Toggle = () => {
-     setToggle(!toggle);
-   };
-  
+  const [toggle, setToggle] = useState(true);
+  const [showModalDelete, setShowModalDelete] = useState(false);
+  const [publisherToDelete, setPublisherToDelete] = useState(null);
+  const Toggle = () => {
+    setToggle(!toggle);
+  };
+
   const deletePublisher = useSelector(
     (state) => state.admin.product.deletePublisher
   );
@@ -43,18 +44,18 @@ const PublisherManage = () => {
   );
 
   useEffect(() => {
-   fetchAllPublisher();
+    fetchAllPublisher();
   }, [page, deletePublisher, createPublisher]);
 
-const fetchAllPublisher = async () => {
-  try {
-    const res = await getPublisher(page);
-    setListPublisher(res.data.getPublisher);
-    setTotalPage(res.data.totalPagesPublihser);
-  } catch (error) {
-    console.log(error);
-  }
-};
+  const fetchAllPublisher = async () => {
+    try {
+      const res = await getPublisher(page);
+      setListPublisher(res.data.getPublisher);
+      setTotalPage(res.data.totalPagesPublihser);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handlePageClick = (e) => {
     setPage(e.selected + 1);
