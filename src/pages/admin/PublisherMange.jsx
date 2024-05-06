@@ -74,6 +74,12 @@ const PublisherManage = () => {
 
   return (
     <>
+      <ModalDeletePublisher
+        showModalDelete={showModalDelete}
+        handleCloseDelete={() => setShowModalDelete(false)}
+        deleteClick={deleteClick}
+        publisherToDelete={publisherToDelete}
+      />
       <div className="container-fluid bg min-vh-100 bg-gray-300 ">
         <div className="row ">
           {toggle && (
