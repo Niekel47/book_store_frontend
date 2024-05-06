@@ -50,9 +50,12 @@ const UserManage = () => {
   };
 
   const deleteClick = async (user_id) => {
-    dispatch(handleDeleteUser(user_id)).then((res) => {
-      toast.success("Xoa thanh cong");
-    });
+    setUserIdToDelete(user_id);
+    setShowModalDelete(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setShowModalDelete(false);
   };
 
   return (
