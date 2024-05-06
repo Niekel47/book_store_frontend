@@ -69,12 +69,12 @@ const CategoryManage = () => {
     setShowModalAdd(false);
   };
 
-const HandledeleteClick = (category_id) => {
+const deleteClick = (category_id) => {
   setCategoryToDelete(category_id);
   setShowModalDelete(true);
 };
 
-  const deleteClick = async (category_id) => {
+  const HandledeleteClick = async (category_id) => {
     dispatch(handleDeleteCategory(category_id)).then((res) => {
       toast.success("Xoa thanh cong");
     });
@@ -85,7 +85,7 @@ const HandledeleteClick = (category_id) => {
       <ModalDeleteCategory
         showModalDelete={showModalDelete}
         handleCloseDelete={() => setShowModalDelete(false)}
-        deleteClick={deleteClick}
+        deleteClick={HandledeleteClick}
         categoryToDelete={categoryToDelete}
       />
       <div className="container-fluid bg min-vh-100 bg-gray-300 ">
