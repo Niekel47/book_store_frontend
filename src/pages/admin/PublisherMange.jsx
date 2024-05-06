@@ -81,7 +81,7 @@ const PublisherManage = () => {
       <ModalDeletePublisher
         showModalDelete={showModalDelete}
         handleCloseDelete={() => setShowModalDelete(false)}
-        deleteClick={deleteClick}
+        deleteClick={HandledeleteClick}
         publisherToDelete={publisherToDelete}
       />
       <div className="container-fluid bg min-vh-100 bg-gray-300 ">
