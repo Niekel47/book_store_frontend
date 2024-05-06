@@ -103,9 +103,9 @@ const ProductDetailList = () => {
           {/* header */}
           <div className="text-center mb-10 max-w-[600px] mx-auto">
             <p className="text-sm bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-              Top Books for you
+              Sách Hay dành cho Bạn
             </p>
-            <h1 className="text-3xl font-bold">Top Books</h1>
+            <h1 className="text-3xl font-bold">Sách HOT</h1>
           </div>
 
           {/* Body section */}
@@ -113,18 +113,18 @@ const ProductDetailList = () => {
             {/* Filters */}
             <div className="flex justify-between mb-5">
               <div className="w-[19%] ">
-                <h2 className="text-lg font-semibold mb-2">Filters:</h2>
+                <h2 className="text-lg font-semibold mb-2">Tìm kiếm sản phẩm</h2>
                 <div className="mb-3">
                   <label htmlFor="sortOrder" className="mr-2">
-                    Sort by price:
+                    Tìm kiếm theo giá:
                   </label>
                   <select
                     id="sortOrder"
                     value={sortOrder}
                     onChange={(e) => setSortOrder(e.target.value)}
                   >
-                    <option value="asc">Ascending</option>
-                    <option value="desc">Descending</option>
+                    <option value="asc">Sắp xếp theo thứ tự tăng dần</option>
+                    <option value="desc">Sắp xếp theo thứ tự giảm dần</option>
                   </select>
                 </div>
                 <ul>
