@@ -84,6 +84,7 @@ const ProductManage = () => {
        toast.success("Xoa thanh cong");
        setShowModalDelete(false);
      });
+     handleCloseDelete();
    };
 
   return (
