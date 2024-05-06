@@ -66,7 +66,11 @@ const PublisherManage = () => {
   const displayAdd = () => {
     setShowModalAdd(true);
   };
-  const deleteClick = async (publisher_id) => {
+  const deleteClick = (publisher_id) => {
+    setPublisherToDelete(publisher_id);
+    setShowModalDelete(true);
+  };
+  const HandledeleteClick = async (publisher_id) => {
     dispatch(handleDeletePublisher(publisher_id)).then((res) => {
       toast.success("Xoa thanh cong");
     });
