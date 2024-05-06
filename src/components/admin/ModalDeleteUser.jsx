@@ -28,7 +28,10 @@ const ModalDeleteUser = (props) => {
         </Modal.Header>
         <Modal.Body>Bạn có chắc chắn muốn xóa người dùng này không?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button
+            className="px-4 py-2 text-white bg-gray-500 rounded hover:bg-gray-400"
+            onClick={handleClose}
+          >
             Hủy
           </Button>
           <Button variant="danger" onClick={deleteUser}>

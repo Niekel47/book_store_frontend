@@ -13,6 +13,7 @@ import {
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { toast } from "react-toastify";
+import ModalDeleteUser from "../../components/admin/ModalDeleteUser";
 
 const UserManage = () => {
   const navigate = useNavigate();
@@ -60,6 +61,11 @@ const UserManage = () => {
 
   return (
     <>
+      <ModalDeleteUser
+        userId={userIdToDelete}
+        showModalDelete={showModalDelete}
+        handleClose={handleCloseDeleteModal}
+      />
       <div className="container-fluid bg min-vh-100 bg-gray-300 ">
         <div className="row ">
           {toggle && (
