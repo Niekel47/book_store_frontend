@@ -32,6 +32,8 @@ const OrderManage = () => {
   const [listOrder, setListOrder] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [dataOrder, setDataOrder] = useState({});
+  const [revenueData, setRevenueData] = useState([]);
+  console.log("revenueData", revenueData);
  
   const Toggle = () => {
     setToggle(!toggle);
@@ -45,6 +47,7 @@ const OrderManage = () => {
       const res = await getOrder(page);
       setListOrder(res.data.getallOrder);
       setTotalPage(res.data.totalPagesOrder);
+      setRevenueData(calculateRevenue(res.data.getallOrder));
     } catch (error) {
       console.log(error);
     }
@@ -54,9 +57,11 @@ const OrderManage = () => {
     fetchAllOrder(e.selected + 1);
   };
   const paymentData = listOrder.map((order) => order.payment);
+  console.log("listorder", listOrder)
+  console.log("paymentData", paymentData);
   const totalData = listOrder.map((order) => order.total);
-  const revenueData = calculateRevenue(listOrder);
-  console.log("revenueData", revenueData);
+  // const revenueData = calculateRevenue(listOrder);
+  // console.log("revenueData", revenueData);
   const displayStatus = (status, order_id) => {
     let statusContent;
     switch (status) {

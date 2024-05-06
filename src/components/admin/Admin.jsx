@@ -23,7 +23,7 @@ const Admin = () => {
   };
   useEffect(() => {
     dispatch(getOrderHome());
-    fetchAllOrder();
+    // fetchAllOrder();
   }, [page]);
   const fetchAllOrder = async () => {
     try {
@@ -111,7 +111,7 @@ const Admin = () => {
                   </div>
                 </div>
               </div>
-              <table className="table caption-top bg-white rounded mt-2">
+              {/* <table className="table caption-top bg-white rounded mt-2">
                 <caption className="text fs-4">ĐƠN HÀNG</caption>
                 <thead>
                   <tr>
@@ -161,7 +161,7 @@ const Admin = () => {
                   activeClassName="active"
                   renderOnZeroPageCount={null}
                 />
-              )}
+              )} */}
             </div>
           </div>
         </div>

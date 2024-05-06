@@ -41,6 +41,7 @@ const ProductManage = () => {
   );
   console.log("updateProduct", updateProduct);
   const listProducts = useSelector((state) => state.admin.product.listProduct);
+  console.log("listProducts", listProducts);
   const Pagecount = useSelector((state) => state.admin.product.totalPages);
 
   const Toggle = () => {
