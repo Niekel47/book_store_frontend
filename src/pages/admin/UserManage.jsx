@@ -23,10 +23,12 @@ const UserManage = () => {
   const [users, setUsers] = useState([]);
   const [showModalAdd, setShowModalAdd] = useState(false);
   const listUsers = useSelector((state) => state.admin.product.listUser);
-   const [toggle, setToggle] = useState(true);
-   const Toggle = () => {
-     setToggle(!toggle);
-   };
+  const [toggle, setToggle] = useState(true);
+  const [showModalDelete, setShowModalDelete] = useState(false);
+  const [userIdToDelete, setUserIdToDelete] = useState(null);
+  const Toggle = () => {
+    setToggle(!toggle);
+  };
   const deleteuser = useSelector((state) => state.admin.product.deleteUser);
   const totalPages = useSelector((state) => state.admin.product.totalPagesUser);
 
@@ -65,7 +67,7 @@ const UserManage = () => {
           {toggle && <div className="col-4 col-md-2"></div>}
           <div className="col">
             <div className="px-3">
-              <Nav Toggle={Toggle}/>
+              <Nav Toggle={Toggle} />
               <div className="flex justify-between">
                 <div className="text-gray-500 text-2xl">Quản lý người dùng</div>
               </div>
