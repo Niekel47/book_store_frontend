@@ -136,8 +136,8 @@ const OrderManage = () => {
  const handleDelete = (order_id) => {
    dispatch(handleDeleteOrder(order_id)).then((res) => {
      toast.success("Xoa thanh cong");
-     setShowModalDelete(false);
    });
+   setShowModalDelete(false);
  };
   return (
     <>
