@@ -32,7 +32,8 @@ const ModalDeleteUser = (props) => {
             className="px-4 py-2 text-white bg-gray-500 rounded hover:bg-gray-400"
             onClick={handleClose}
           >
-            Hủyyyy
+            Hủyyyyy
+            
           </Button>
           <Button
             className="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-400 ml-2"
