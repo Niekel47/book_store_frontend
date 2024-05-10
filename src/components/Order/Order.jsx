@@ -40,6 +40,13 @@ const Order = () => {
   const [address, setAddress] = useState("");
   const [payment, setPayment] = useState("");
   const provinces = useSelector((state) => state.customer.product.provinces);
+  const selectedProvince = provinces.find(
+    (province) => province.province_id === province_id
+  );
+  const selectedDistrict = district_id.find(
+    (district) => district.district_id === selectedDistrictId
+  );
+  const selectedWard = ward_id.find((ward) => ward.ward_id === selectedWardId);
   useEffect(() => {
     if (userProfile) {
       setName(userProfile.fullname || "");
@@ -99,13 +106,7 @@ const Order = () => {
     }
     return true;
   };
-  const selectedProvince = provinces.find(
-    (province) => province.province_id === province_id
-  );
-  const selectedDistrict = district_id.find(
-    (district) => district.district_id === selectedDistrictId
-  );
-  const selectedWard = ward_id.find((ward) => ward.ward_id === selectedWardId);
+  
   const orderClick = () => {
     let check = isValidOrder();
     if (check === true) {

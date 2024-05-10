@@ -78,6 +78,7 @@ const deleteClick = (category_id) => {
     dispatch(handleDeleteCategory(category_id)).then((res) => {
       toast.success("Xoa thanh cong");
     });
+    setShowModalDelete(false);
   };
 
   return (

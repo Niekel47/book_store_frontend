@@ -120,6 +120,7 @@ const ModalAddProduct = (props) => {
 
           toast.success("Thêm sản phẩm thành công");
           clearInput();
+          handleClose();
         });
       } catch (error) {
         console.error(error);

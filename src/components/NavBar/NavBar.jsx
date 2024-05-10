@@ -47,7 +47,7 @@ const Navbar = ({ handleOrderPopup }) => {
     dispatch(logout());
     localStorage.removeItem("jwt");
     toast.success("Đăng xuất thành công");
-    // navigate("/");
+    navigate("/");
     window.location.reload();
   };
   const navigateToCart = () => {
